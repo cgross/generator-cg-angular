@@ -1,0 +1,39 @@
+{
+  "name": "generator-cg-angular",
+  "version": "1.0.0",
+  "description": "Yeoman Generator for Enterprise Angular projects.",
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "homepage": "https://github.com/cgross/generator-cg-angular",
+  "bugs": "https://github.com/cgross/generator-cg-angular/issues",
+  "author": {
+    "name": "Chris Gross",
+    "email": "schtoo@schtoo.com",
+    "url": "https://github.com/cgross"
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cgross/generator-cg-angular.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "~0.12.0",
+    "underscore": "~1.4.4",
+    "underscore.string": "~2.3.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.10.0"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}

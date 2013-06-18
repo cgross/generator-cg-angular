@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="<%= _.slugify(appname) %>">
+<head>
+  <title>Sample</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Libs -->
+  <link href="lib/angular-ui/build/angular-ui.css" rel="stylesheet">
+
+  <!-- App CSS -->
+  <link href="css/app.less" type="text/css" rel="stylesheet/less">
+
+</head>
+<body>
+
+  <!-- Libs -->
+  <script src="lib/less.js/dist/less-1.4.0.js" data-build="exclude"></script>
+  <script src="lib/jquery/jquery.js"></script>
+  <script src="lib/lodash/dist/lodash.compat.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-affix.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-alert.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-button.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-carousel.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-collapse.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-dropdown.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-modal.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-tooltip.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-popover.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-scrollspy.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-tab.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-transition.js"></script>
+  <script src="lib/bootstrap/js/bootstrap-typeahead.js"></script>
+  <script src="lib/angular/angular.min.js"></script>
+  <script src="lib/angular-resource/angular-resource.js"></script>
+  <script src="lib/angular-cookies/angular-cookies.js"></script>
+  <script src="lib/angular-ui/build/angular-ui.js"></script>
+  <script src="lib/angular-bootstrap/ui-bootstrap.js"></script>
+  <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="lib/moment/min/moment.min.js"></script>
+
+  <!-- Main App JS -->
+  <script src="js/setup.js"></script>
+
+  <!-- Service JS -->
+  <!-- Add New Service JS Above --> 
+
+  <!-- Directive JS -->
+  <!-- Add New Directive JS Above -->
+
+  <!-- Filter JS -->
+  <!-- Add New Filter JS Above -->
+
+  <!-- Partial JS -->
+  <!-- Add New Partial JS Above -->
+
+  <div>
+    <div id="content" class="container">
+      <div class="row">
+        <div ng-view>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

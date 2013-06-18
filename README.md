@@ -17,29 +17,29 @@ Directory Layout
 -------------
 Below is an explanation of the folder structure.
 
-    /css ........................................... usually only contains app.less
-        app.less ................................... main app-wide styles
-    /img ........................................... images (not created by default but included in bin if added)
-    /js ............................................ app global javascript files
-        setup.js ................................... angular module initialization and route setup
-    /directive. .................................... angular directives folder
-        my-directive.js ............................ example simple directive
-        /my-directive2 ............................. example complex directive (contains external partial)
-            my-directive2.js ....................... complex directive javascript
-            my-directive2.html ..................... complex directive partial
-            my-directive2.less ..................... complex directive LESS
-    /filter ........................................ angular filters folder
-        my-filter.js ............................... example filter
-    /partial ....................................... angular partials folder
-        /my-partial ................................ example partial
-            my-partial.html ........................ example partial html
-            my-partial.js .......................... example partial controller
-            my-partial.less ........................ example partial LESS
-    /service ....................................... angular services folder
-        my-service.js .............................. example service
-    /bin ........................................... distributable version of app built using grunt and Gruntfile.js
-    /lib ........................................... 3rd party libraries, managed by bower (renamed components to lib)
-    /node_modules .................................. npm managed libraries used by grunt
+    /css .............................. usually only contains app.less
+        app.less ...................... main app-wide styles
+    /img .............................. images (not created by default but included in bin if added)
+    /js ............................... app global javascript files
+        setup.js ...................... angular module initialization and route setup
+    /directive. ....................... angular directives folder
+        my-directive.js ............... example simple directive
+        /my-directive2 ................ example complex directive (contains external partial)
+            my-directive2.js .......... complex directive javascript
+            my-directive2.html ........ complex directive partial
+            my-directive2.less ........ complex directive LESS
+    /filter ........................... angular filters folder
+        my-filter.js .................. example filter
+    /partial .......................... angular partials folder
+        /my-partial ................... example partial
+            my-partial.html ........... example partial html
+            my-partial.js ............. example partial controller
+            my-partial.less ........... example partial LESS
+    /service .......................... angular services folder
+        my-service.js ................. example service
+    /bin .............................. distributable version of app built using grunt and Gruntfile.js
+    /lib .............................. 3rd party libraries, managed by bower (renamed components to lib)
+    /node_modules ..................... npm managed libraries used by grunt
 
 Getting Started
 -------------
@@ -67,7 +67,7 @@ Now that the project is created, you have 3 simple Grunt commands available:
     grunt test    #Run headless unit tests using PhantomJS.
     grunt build   #Places a fully optimized (minified, concatenated, and more) in /bin
 
-Yeoman Subgenerators
+Yeoman Sub-generators
 -------------
 
 There are a set of sub-generators to initialize empty Angular components.  Each of these generators will:

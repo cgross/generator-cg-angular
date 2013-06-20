@@ -6,7 +6,7 @@ describe('<%= ctrlname %>', function() {
 
     beforeEach(inject(function($rootScope, $controller) {
       scope = $rootScope.$new();
-      ctrl = $controller(app.<%= ctrlname %>, {$scope: scope});
+      ctrl = $controller('<%= ctrlname %>', {$scope: scope});
     }));	
 
 	it('should ...', inject(function() {

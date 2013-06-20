@@ -1,6 +1,5 @@
 'use strict';
 var path = require('path');
-var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
 
 var folderMount = function folderMount(connect, point) {
   return connect.static(path.resolve(point));
@@ -10,19 +9,22 @@ module.exports = function (grunt) {
   // Project configuration.
   grunt.initConfig({
     connect: {
-      livereload: {
+      main: {
         options: {
           port: 9001,
           middleware: function(connect, options) {
-            return [lrSnippet, folderMount(connect, options.base)]
+            return [folderMount(connect, options.base)]
           }
         }
       }
     },
-    regarde: {
-      all: {
-        files: ['js/**/*','css/**/*','img/**/*','lib/**/*','partials/**/*','services/**/*','filters/**/*','index.html'],
-        tasks: ['livereload']
+    watch: {
+      main: {
+        options: {
+            livereload: true
+        },
+        files: ['js/**/*','css/**/*','img/**/*','lib/**/*','partial/**/*','service/**/*','filter/**/*','directive/**/*','index.html'],
+        tasks: ['jshint']
       }
     },
     jshint: {
@@ -45,11 +47,10 @@ module.exports = function (grunt) {
           console: true,
           $: true,
           _: true,
-          moment: true,
-          app: true
+          moment: true
         }
       },
-      files: ['js/**/*.js','partials/**/*.js','services/**/*.js','filters/**/*.js']
+      files: ['js/**/*.js','partial/**/*.js','service/**/*.js','filter/**/*.js','directive/**/*.js']
     },
     clean: {
       before:{
@@ -69,8 +70,11 @@ module.exports = function (grunt) {
       }
     },         
     ngtemplates: {
-      app: {
-        src: [ 'partials/**/*.html','directives/**/*.html' ],
+      main: {
+        options: {
+            module:'<%= _.slugify(appname) %>'
+        },
+        src: [ 'partial/**/*.html','directive/**/*.html' ],
         dest: 'temp/templates.js'
       }
     },
@@ -128,13 +132,13 @@ module.exports = function (grunt) {
     },
     cssmin: {
       main: {
-        src:['temp/app.css','<%= dom_munger.data.appcss %>'],
+        src:['temp/app.css','<%%= dom_munger.data.appcss %>'],
         dest:'bin/css/app.full.min.css'
       }
     },
     concat: {
       main: {
-        src: ['<%= dom_munger.data.appjs %>','<%= ngtemplates.app.dest %>'],
+        src: ['<%%= dom_munger.data.appjs %>','<%%= ngtemplates.main.dest %>'],
         dest: 'temp/app.full.js'
       }
     },
@@ -172,17 +176,15 @@ module.exports = function (grunt) {
     },
     jasmine: {
       unit: {
-        src: ['<%= dom_munger.data.appjs %>','lib/angular-mocks/angular-mocks.js'],
+        src: ['<%%= dom_munger.data.appjs %>','lib/angular-mocks/angular-mocks.js'],
         options: {
-          specs: 'test/unit/*.js'
+          specs: 'test/unit/**/*.js'
         }
       }
     }
   });
 
-  grunt.loadNpmTasks('grunt-regarde');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-contrib-livereload');
   grunt.loadNpmTasks('grunt-angular-templates');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -196,8 +198,9 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-ngmin');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript','htmlmin','imagemin','clean:after']);
-  grunt.registerTask('server', ['livereload-start','jshint','connect', 'regarde']);
+  grunt.registerTask('server', ['jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:readscripts','jasmine'])
 };

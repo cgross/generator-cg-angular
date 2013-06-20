@@ -36,6 +36,7 @@ CgangularGenerator.prototype.app = function app() {
     this.directory('skeleton/','./');
     this.template('skeleton/js/setup.js','./js/setup.js');
     this.template('skeleton/bower.json','./bower.json');
+    this.template('skeleton/Gruntfile.js','./Gruntfile.js');
     this.template('skeleton/index.html','./index.html');
     this.template('skeleton/package.json','./package.json');
 };

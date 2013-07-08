@@ -18,29 +18,29 @@ Directory Layout
 -------------
 Below is an explanation of the folder structure.
 
-    /css ........................................... usually only contains app.less
-        app.less ................................... main app-wide styles
-    /img ........................................... images (not created by default but included in bin if added)
-    /js ............................................ app global javascript files
-        setup.js ................................... angular module initialization and route setup
-    /directive ..................................... angular directives folder
-        my-directive.js ............................ example simple directive
-        /my-directive2 ............................. example complex directive (contains external partial)
-            my-directive2.js ....................... complex directive javascript
-            my-directive2.html ..................... complex directive partial
-            my-directive2.less ..................... complex directive LESS
-    /filter ........................................ angular filters folder
-        my-filter.js ............................... example filter
-    /partial ....................................... angular partials folder
-        /my-partial ................................ example partial
-            my-partial.html ........................ example partial html
-            my-partial.js .......................... example partial controller
-            my-partial.less ........................ example partial LESS
-    /service ....................................... angular services folder
-        my-service.js .............................. example service
-    /bin ........................................... distributable version of app built using grunt and Gruntfile.js
-    /lib ........................................... 3rd party libraries, managed by bower (renamed components to lib)
-    /node_modules .................................. npm managed libraries used by grunt
+    /css ................................ usually only contains app.less
+        app.less ........................ main app-wide styles
+    /img ................................ images (not created by default but included in bin if added)
+    /js ................................. app global javascript files
+        setup.js ........................ angular module initialization and route setup
+    /directive .......................... angular directives folder
+        my-directive.js ................. example simple directive
+        /my-directive2 .................. example complex directive (contains external partial)
+            my-directive2.js ............ complex directive javascript
+            my-directive2.html .......... complex directive partial
+            my-directive2.less .......... complex directive LESS
+    /filter ............................. angular filters folder
+        my-filter.js .................... example filter
+    /partial ............................ angular partials folder
+        /my-partial ..................... example partial
+            my-partial.html ............. example partial html
+            my-partial.js ............... example partial controller
+            my-partial.less ............. example partial LESS
+    /service ............................ angular services folder
+        my-service.js ................... example service
+    /bin ................................ distributable version of app built using grunt and Gruntfile.js
+    /lib ................................ 3rd party libraries, managed by bower (renamed components to lib)
+    /node_modules ....................... npm managed libraries used by grunt
 
 Getting Started
 -------------
@@ -114,5 +114,6 @@ The build process uses [grunt-dom-munger](https://github.com/cgross/grunt-dom-mu
 Release History
 -------------
 
+* 7/08/2013 - V1.0.2 - Added utf8 charset to index.html.  Fix for "EMFile, too many open files" on `grunt watch` by no longer watching the `lib` folder.
 * 6/20/2013 - v1.0.1 - Fixed a ton of known issues.  Replaced `grunt-regarde` with `grunt-contrib-watch`.  Fixed and tweaked the unit test specs and `grunt test`.  Fixed issues with the build.  Generator is now ready for real use.
 * 6/18/2013 - v1.0.0 - Initial release of template as Yeoman generator.

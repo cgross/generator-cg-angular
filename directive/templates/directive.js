@@ -5,7 +5,7 @@ angular.module('<%= appname %>').directive('<%= _.classify(name) %>', function()
 		scope: {
 
 		},
-		templateUrl: 'directives/<%= name %>/<%= name %>.html',
+		templateUrl: 'directive/<%= name %>/<%= name %>.html',
 		link: function(scope, element, attrs, fn) {
 
 

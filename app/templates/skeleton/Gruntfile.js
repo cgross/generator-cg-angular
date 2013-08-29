@@ -29,26 +29,7 @@ module.exports = function (grunt) {
     },
     jshint: {
       options: {
-        curly: true,
-        eqeqeq: true,
-        immed: true,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        undef: true,
-        boss: true,
-        eqnull: true,
-        browser: true,
-        smarttabs: true,
-        globals: {
-          jQuery: true,
-          angular: true,
-          console: true,
-          $: true,
-          _: true,
-          moment: true
-        }
+        jshintrc: '.jshintrc'
       },
       files: ['js/**/*.js','partial/**/*.js','service/**/*.js','filter/**/*.js','directive/**/*.js']
     },

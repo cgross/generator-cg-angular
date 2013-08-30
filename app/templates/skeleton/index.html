@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html ng-app="<%= _.slugify(appname) %>">
 <head>
-  <title>Sample</title>
+  <title></title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
 
-  <!-- Libs -->
-  <link href="lib/angular-ui/build/angular-ui.css" rel="stylesheet">
+  <!-- CSS from Bower components  -->
+  <link href="bower_components/angular-ui/build/angular-ui.css" rel="stylesheet">
 
-  <!-- App CSS -->
+  <!-- App LESS -->
   <link href="css/app.less" type="text/css" rel="stylesheet/less">
 
 </head>
 <body>
 
-  <!-- Libs -->
+  <!-- Livereload script for development only (stripped during dist build) -->
   <script src="http://localhost:35729/livereload.js" data-build="exclude"></script>
-  <script src="lib/less.js/dist/less-1.4.0.js" data-build="exclude"></script>
-  <script src="lib/jquery/jquery.js"></script>
-  <script src="lib/lodash/dist/lodash.compat.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-affix.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-alert.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-button.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-carousel.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-collapse.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-dropdown.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-modal.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-tooltip.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-popover.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-scrollspy.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-tab.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-transition.js"></script>
-  <script src="lib/bootstrap/js/bootstrap-typeahead.js"></script>
-  <script src="lib/angular/angular.min.js"></script>
-  <script src="lib/angular-resource/angular-resource.js"></script>
-  <script src="lib/angular-cookies/angular-cookies.js"></script>
-  <script src="lib/angular-ui/build/angular-ui.js"></script>
-  <script src="lib/angular-bootstrap/ui-bootstrap.js"></script>
-  <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-  <script src="lib/moment/min/moment.min.js"></script>
+
+  <!-- JS from Bower components -->
+  <script src="bower_components/less.js/dist/less-1.4.0.js" data-build="exclude"></script>
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-affix.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-alert.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-button.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-carousel.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-collapse.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-dropdown.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-modal.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-tooltip.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-popover.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-scrollspy.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-tab.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-transition.js"></script>
+  <script src="bower_components/bootstrap/js/bootstrap-typeahead.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-ui/build/angular-ui.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/moment/min/moment.min.js"></script>
 
   <!-- Main App JS -->
   <script src="js/setup.js"></script>

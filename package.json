@@ -1,6 +1,6 @@
 {
   "name": "generator-cg-angular",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Yeoman Generator for Enterprise Angular projects.",
   "keywords": [
     "yeoman-generator"
@@ -21,7 +21,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.12.0",
+    "yeoman-generator": "~0.13.0",
     "underscore": "~1.4.4",
     "underscore.string": "~2.3.1"
   },

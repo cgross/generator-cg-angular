@@ -35,7 +35,7 @@ module.exports = function (grunt) {
     },
     clean: {
       before:{
-        src:['bin','temp']
+        src:['dist','temp']
       },
       after: {
         src:['temp']
@@ -62,12 +62,12 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['index.html'], dest: 'bin/'},
-          {src: ['img/**'], dest: 'bin/'},
-          {src: ['lib/angular-ui/build/angular-ui-ieshiv.js'], dest: 'bin/'},
-          {src: ['lib/font-awesome/build/assets/font-awesome/font/**'], dest: 'bin/',filter:'isFile',expand:true},
-          // {src: ['lib/select2/*.png','lib/select2/*.gif'], dest:'bin/css/',flatten:true,expand:true},
-          {src: ['lib/angular-mocks/angular-mocks.js'], dest: 'bin/'}
+          {src: ['index.html'], dest: 'dist/'},
+          {src: ['img/**'], dest: 'dist/'},
+          {src: ['bower_components/angular-ui/build/angular-ui-ieshiv.js'], dest: 'dist/'},
+          {src: ['bower_components/font-awesome/build/assets/font-awesome/font/**'], dest: 'dist/',filter:'isFile',expand:true},
+          // {src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
+          {src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
         ]
       }
     },
@@ -89,32 +89,32 @@ module.exports = function (grunt) {
           remove:'script[data-remove!="exclude"]',
           append:{selector:'head',html:'<script src="app.full.min.js"></script>'}
         },
-        src:'bin/index.html'
+        src:'dist/index.html'
       }, 
       addscript: {
         options:{
           append:{selector:'body',html:'<script src="app.full.min.js"></script>'}
         },
-        src:'bin/index.html'
+        src:'dist/index.html'
       },       
       removecss: {
         options:{
           remove:'link',
           append:{selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
         },
-        src:'bin/index.html'
+        src:'dist/index.html'
       },
       addcss: {
         options:{
           append:{selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
         },
-        src:'bin/index.html'
+        src:'dist/index.html'
       }      
     },
     cssmin: {
       main: {
         src:['temp/app.css','<%%= dom_munger.data.appcss %>'],
-        dest:'bin/css/app.full.min.css'
+        dest:'dist/css/app.full.min.css'
       }
     },
     concat: {
@@ -132,7 +132,7 @@ module.exports = function (grunt) {
     uglify: {
       main: {
         src: 'temp/app.full.js',
-        dest:'bin/app.full.min.js'
+        dest:'dist/app.full.min.js'
       }
     },
     htmlmin: {
@@ -142,22 +142,22 @@ module.exports = function (grunt) {
           collapseWhitespace: true
         },
         files: {
-          'bin/index.html': 'bin/index.html'
+          'dist/index.html': 'dist/index.html'
         }
       }
     },
     imagemin: {
       main:{
         files: [{
-          expand: true, cwd:'bin/',
+          expand: true, cwd:'dist/',
           src:['**/{*.png,*.jpg}'],
-          dest: 'bin/'
+          dest: 'dist/'
         }]
       }
     },
     jasmine: {
       unit: {
-        src: ['<%%= dom_munger.data.appjs %>','lib/angular-mocks/angular-mocks.js'],
+        src: ['<%%= dom_munger.data.appjs %>','bower_components/angular-mocks/angular-mocks.js'],
         options: {
           specs: 'test/unit/**/*.js'
         }

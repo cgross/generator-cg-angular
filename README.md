@@ -20,14 +20,14 @@ Below is an explanation of the folder structure.
 
     /css ........................... usually only contains app.less
         app.less ................... main app-wide styles
-    /img ........................... images (not created by default but included in bin if added)
+    /img ........................... images (not created by default but included in /dist if added)
     /js ............................ app global javascript files
         setup.js ................... angular module initialization and route setup
     /directive ..................... angular directives folder
         my-directive.js ............ example simple directive
         /my-directive2 ............. example complex directive (contains external partial)
             my-directive2.js ....... complex directive javascript
-            my-directive2.htm....... complex directive partial
+            my-directive2.html...... complex directive partial
             my-directive2.less ..... complex directive LESS
     /filter ........................ angular filters folder
         my-filter.js ............... example filter
@@ -38,9 +38,11 @@ Below is an explanation of the folder structure.
             my-partial.less ........ example partial LESS
     /service ....................... angular services folder
         my-service.js .............. example service
-    /bin ........................... distributable version of app built using grunt and Gruntfile.js
-    /lib ........................... 3rd party libraries, managed by bower (renamed components to lib)
+    /dist .......................... distributable version of app built using grunt and Gruntfile.js
+    /bower_component................ 3rd party libraries managed by bower
     /node_modules .................. npm managed libraries used by grunt
+
+The `directive`, `filter`, `partial`, and `service` directories won't exist until one of the relevant components is created using a sub-generator.
 
 Getting Started
 -------------
@@ -66,7 +68,7 @@ Now that the project is created, you have 3 simple Grunt commands available:
 
     grunt server  #This will run a development server with watch & reload enabled.
     grunt test    #Run headless unit tests using PhantomJS.
-    grunt build   #Places a fully optimized (minified, concatenated, and more) in /bin
+    grunt build   #Places a fully optimized (minified, concatenated, and more) in /dist
 
 Yeoman Subgenerators
 -------------
@@ -113,7 +115,7 @@ The build process uses [grunt-dom-munger](https://github.com/cgross/grunt-dom-mu
 
 Release History
 -------------
-
+* 8/29/2013 - V1.0.3 - Renamed `/lib` back to `/bower_components` as clarity trumps brevity.  Renamed `/bin` to `/dist`. Fixed spelling error in generated directive's js template location.  Moved up to later version of `yeoman-generator` dependency to solve "Cannot read bold of undefined" error coming from Yeoman.  JSHint options now read from `.jshintrc`.  And more small stuff.
 * 7/08/2013 - V1.0.2 - Added utf8 charset to index.html.  Fix for "EMFile, too many open files" on `grunt watch` by no longer watching the `lib` folder.
 * 6/20/2013 - v1.0.1 - Fixed a ton of known issues.  Replaced `grunt-regarde` with `grunt-contrib-watch`.  Fixed and tweaked the unit test specs and `grunt test`.  Fixed issues with the build.  Generator is now ready for real use.
 * 6/18/2013 - v1.0.0 - Initial release of template as Yeoman generator.

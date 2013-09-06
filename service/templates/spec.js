@@ -1,10 +1,10 @@
-describe('{%= js_name %}', function() {
+describe('<%= name %>', function() {
 
   beforeEach(module('<%= appname %>'));
 
-  it('should ...', inject(function({%= js_name %}) {
+  it('should ...', inject(function(<%= name %>) {
 
-	//expect({%= js_name %}.doSomething()).toEqual('something');
+	//expect(<%= name %>.doSomething()).toEqual('something');
 
   }));
 

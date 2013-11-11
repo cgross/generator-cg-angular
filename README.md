@@ -4,8 +4,8 @@
 
 Features
 
-* Provides a directory structure geared towards large Angular projects.  
-    * Each controller, service, filter, and directive are placed in their own file.  
+* Provides a directory structure geared towards large Angular projects.
+    * Each controller, service, filter, and directive are placed in their own file.
     * All files related to a conceptual unit are placed together.  For example, the controller and HTML file for a partial are placed together in the same directory.
 * Provides a ready-made Grunt build that produces an extremely optimized distribution.
    * Build uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) so you don't have to use the Angular injection syntax for safe minification (i.e. you dont need `$inject` or `(['$scope','$http',...`.
@@ -101,7 +101,7 @@ The project will include a ready-made Grunt build that will:
 
 * Build all the LESS files into one minified CSS file.
 * Uses [grunt-angular-templates](https://github.com/ericclemmons/grunt-angular-templates) to turn all your partials into Javascript.
-* Uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) to preprocess all Angular injectable methods and add the necessary Angular annotations to ensure minification will not break your app (and you don't have to use the array syntax to 
+* Uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) to preprocess all Angular injectable methods and add the necessary Angular annotations to ensure minification will not break your app (and you don't have to use the array syntax to
 manually add the annotations nor $inject).  Read more about [ngmin](https://github.com/btford/ngmin).
 * Concatenates and minifies all Javascript into one file.
 * Replaces all appropriate script references in `index.html` with the minified CSS and JS files.
@@ -115,6 +115,7 @@ The build process uses [grunt-dom-munger](https://github.com/cgross/grunt-dom-mu
 
 Release History
 -------------
+* 12/30/2013 - v2.0.0 - Big Update.  Angular 1.2 and Bootstrap 3.  Newer versions of Angular UI, Font Awesome, and JQuery.  Lodash was replaced with Underscore.  Lots of other small changes.
 * 9/06/2013 - V1.0.4 - Fixed templating issue with generated specs for `yo cg-angular:service` subgenerator.
 * 8/29/2013 - V1.0.3 - Renamed `/lib` back to `/bower_components` as clarity trumps brevity.  Renamed `/bin` to `/dist`. Fixed spelling error in generated directive's js template location.  Moved up to later version of `yeoman-generator` dependency to solve "Cannot read bold of undefined" error coming from Yeoman.  JSHint options now read from `.jshintrc`.  And more small stuff.
 * 7/08/2013 - V1.0.2 - Added utf8 charset to index.html.  Fix for "EMFile, too many open files" on `grunt watch` by no longer watching the `lib` folder.

@@ -2,7 +2,6 @@ var path = require('path');
 var fs = require('fs');
 
 exports.addToFile = function(filename,lineToAdd,beforeMarker,spacing){
-
 	try {
 		var fullPath = path.join(process.cwd(),filename);
 		var fileSrc = fs.readFileSync(fullPath,'utf8');

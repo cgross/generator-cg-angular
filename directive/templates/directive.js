@@ -1,4 +1,4 @@
-angular.module('<%= appname %>').directive('<%= _.classify(name) %>', function() {
+angular.module('<%= appname %>').directive('<%= _.camelize(name) %>', function() {
 	return {
 		restrict: 'E',
 		replace: true,

@@ -6,8 +6,7 @@ var folderMount = function folderMount(connect, point) {
 };
 
 module.exports = function (grunt) {
-  // show elapsed time at the end
-  require('time-grunt')(grunt);
+
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
 
@@ -58,7 +57,17 @@ module.exports = function (grunt) {
     ngtemplates: {
       main: {
         options: {
-            module:'<%= _.slugify(appname) %>'
+            module:'<%= _.slugify(appname) %>',
+            htmlmin: {
+              collapseBooleanAttributes: true,
+              collapseWhitespace: true,
+              removeAttributeQuotes: true,
+              removeComments: true,
+              removeEmptyAttributes: true,
+              removeRedundantAttributes: true,
+              removeScriptTypeAttributes: true,
+              removeStyleLinkTypeAttributes: true
+            }
         },
         src: [ 'partial/**/*.html','directive/**/*.html' ],
         dest: 'temp/templates.js'
@@ -69,10 +78,10 @@ module.exports = function (grunt) {
         files: [
           {src: ['index.html'], dest: 'dist/'},
           {src: ['img/**'], dest: 'dist/'},
-          {src: ['bower_components/angular-ui/build/angular-ui-ieshiv.js'], dest: 'dist/'},
-          {src: ['bower_components/font-awesome/build/assets/font-awesome/font/**'], dest: 'dist/',filter:'isFile',expand:true},
+          {src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
+          {src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/',filter:'isFile',expand:true}
           // {src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
-          {src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
+          // {src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
         ]
       }
     },
@@ -143,8 +152,14 @@ module.exports = function (grunt) {
     htmlmin: {
       main: {
         options: {
+          collapseBooleanAttributes: true,
+          collapseWhitespace: true,
+          removeAttributeQuotes: true,
           removeComments: true,
-          collapseWhitespace: true
+          removeEmptyAttributes: true,
+          removeRedundantAttributes: true,
+          removeScriptTypeAttributes: true,
+          removeStyleLinkTypeAttributes: true
         },
         files: {
           'dist/index.html': 'dist/index.html'

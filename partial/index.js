@@ -39,7 +39,7 @@ PartialGenerator.prototype.askFor = function askFor() {
 
 PartialGenerator.prototype.files = function files() {
 
-	this.ctrlname = _.classify(this.name) + 'Ctrl';
+	this.ctrlname = _.camelize(_.classify(this.name)) + 'Ctrl';
 
 	this.template('partial.js', 'partial/'+this.name+'/'+this.name+'.js');
 	this.template('partial.html', 'partial/'+this.name+'/'+this.name+'.html');

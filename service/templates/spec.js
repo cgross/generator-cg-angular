@@ -1,10 +1,10 @@
-describe('<%= name %>', function() {
+describe('<%= _.camelize(name) %>', function() {
 
   beforeEach(module('<%= appname %>'));
 
-  it('should ...', inject(function(<%= name %>) {
+  it('should ...', inject(function(<%= _.camelize(name) %>) {
 
-	//expect(<%= name %>.doSomething()).toEqual('something');
+	//expect(<%= _.camelize(name) %>.doSomething()).toEqual('something');
 
   }));
 

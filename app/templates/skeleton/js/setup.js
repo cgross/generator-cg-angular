@@ -1,4 +1,4 @@
-angular.module('<%= _.slugify(appname) %>', ['ui.bootstrap','ui']);
+angular.module('<%= _.slugify(appname) %>', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate']);
 
 angular.module('<%= _.slugify(appname) %>').config(function($routeProvider) {
 

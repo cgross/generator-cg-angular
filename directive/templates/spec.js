@@ -1,4 +1,4 @@
-describe('<%= _.classify(name) %>', function() {
+describe('<%= _.camelize(name) %>', function() {
 
   beforeEach(module('<%= appname %>'));
 

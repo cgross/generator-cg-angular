@@ -6,6 +6,11 @@ var folderMount = function folderMount(connect, point) {
 };
 
 module.exports = function (grunt) {
+  // show elapsed time at the end
+  require('time-grunt')(grunt);
+  // load all grunt tasks
+  require('load-grunt-tasks')(grunt);
+
   // Project configuration.
   grunt.initConfig({
     connect: {
@@ -40,7 +45,7 @@ module.exports = function (grunt) {
       after: {
         src:['temp']
       }
-    }, 
+    },
     less: {
       production: {
         options: {
@@ -49,7 +54,7 @@ module.exports = function (grunt) {
           "temp/app.css": "css/app.less"
         }
       }
-    },         
+    },
     ngtemplates: {
       main: {
         options: {
@@ -90,13 +95,13 @@ module.exports = function (grunt) {
           append:{selector:'head',html:'<script src="app.full.min.js"></script>'}
         },
         src:'dist/index.html'
-      }, 
+      },
       addscript: {
         options:{
           append:{selector:'body',html:'<script src="app.full.min.js"></script>'}
         },
         src:'dist/index.html'
-      },       
+      },
       removecss: {
         options:{
           remove:'link',
@@ -109,7 +114,7 @@ module.exports = function (grunt) {
           append:{selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
         },
         src:'dist/index.html'
-      }      
+      }
     },
     cssmin: {
       main: {
@@ -164,22 +169,6 @@ module.exports = function (grunt) {
       }
     }
   });
-
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-angular-templates');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-dom-munger');
-  grunt.loadNpmTasks('grunt-contrib-htmlmin');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
-  grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
-  grunt.loadNpmTasks('grunt-ngmin');
-  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript','htmlmin','imagemin','clean:after']);
   grunt.registerTask('server', ['jshint','connect', 'watch']);

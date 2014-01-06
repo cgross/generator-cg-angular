@@ -20,7 +20,7 @@ util.inherits(ServiceGenerator, yeoman.generators.NamedBase);
 
 ServiceGenerator.prototype.files = function files() {
 	this.template('service.js', 'service/'+this.name+'.js');
-	this.template('spec.js', 'test/unit/service/'+this.name+'.js');
+	this.template('spec.js', 'service/'+this.name+'-spec.js');
 
 	cgUtils.addToFile('index.html','<script src="service/'+this.name+'.js"></script>',cgUtils.SERVICE_JS_MARKER,'  ');
 	this.log.writeln(' updating'.green + ' %s','index.html');

@@ -1,9 +1,10 @@
 {
   "name": "generator-cg-angular",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Yeoman Generator for Enterprise Angular projects.",
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "angular"
   ],
   "homepage": "https://github.com/cgross/generator-cg-angular",
   "bugs": "https://github.com/cgross/generator-cg-angular/issues",

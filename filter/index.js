@@ -20,7 +20,7 @@ util.inherits(FilterGenerator, yeoman.generators.NamedBase);
 
 FilterGenerator.prototype.files = function files() {
 	this.template('filter.js', 'filter/'+this.name+'.js');
-	this.template('spec.js', 'test/unit/filter/'+this.name+'.js');
+	this.template('spec.js', 'filter/'+this.name+'-spec.js');
 
 	cgUtils.addToFile('index.html','<script src="filter/'+this.name+'.js"></script>',cgUtils.FILTER_JS_MARKER,'  ');
 	this.log.writeln(' updating'.green + ' %s','index.html');

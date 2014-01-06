@@ -6,13 +6,14 @@ Features
 
 * Provides a directory structure geared towards large Angular projects.
     * Each controller, service, filter, and directive are placed in their own file.
-    * All files related to a conceptual unit are placed together.  For example, the controller and HTML file for a partial are placed together in the same directory.
+    * All files related to a conceptual unit are placed together.  For example, the controller, HTML, LESS, and unit test for a partial are placed together in the same directory.
 * Provides a ready-made Grunt build that produces an extremely optimized distribution.
    * Build uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) so you don't have to use the Angular injection syntax for safe minification (i.e. you dont need `$inject` or `(['$scope','$http',...`.
+   * `grunt server` task allows you to run a simple development server with watch/livereload enabled.  Additionally, JSHint and the appropriate unit tests are run for the changed files.
 * Integrates Bower for package management
 * Includes Yeoman sub-generators for directives, services, partials, and filters
 * Integrates LESS and includes Bootstrap via the source LESS files allowing you to reuse Bootstrap vars/mixins/etc.
-* Testable - Included Yeoman sub-generators also build test skeletons.  Run test via `grunt test`.
+* Easily Testable - Each sub-generator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt server`.
 
 Directory Layout
 -------------
@@ -25,19 +26,24 @@ Below is an explanation of the folder structure.
         setup.js ................... angular module initialization and route setup
     /directive ..................... angular directives folder
         my-directive.js ............ example simple directive
+        my-directive-spec.js ....... example simple directive unit test
         /my-directive2 ............. example complex directive (contains external partial)
             my-directive2.js ....... complex directive javascript
             my-directive2.html...... complex directive partial
             my-directive2.less ..... complex directive LESS
+            my-directive2-spec.js .. complex directive unit test
     /filter ........................ angular filters folder
         my-filter.js ............... example filter
+        my-filter-spec.js .......... example filter unit test
     /partial ....................... angular partials folder
         /my-partial ................ example partial
             my-partial.html ........ example partial html
             my-partial.js .......... example partial controller
             my-partial.less ........ example partial LESS
+            my-partial-spec.js ..... example partial unit test
     /service ....................... angular services folder
         my-service.js .............. example service
+        my-service-spec.js ......... example service unit test
     /dist .......................... distributable version of app built using grunt and Gruntfile.js
     /bower_component................ 3rd party libraries managed by bower
     /node_modules .................. npm managed libraries used by grunt
@@ -67,7 +73,7 @@ Grunt Tasks
 Now that the project is created, you have 3 simple Grunt commands available:
 
     grunt server  #This will run a development server with watch & reload enabled.
-    grunt test    #Run headless unit tests using PhantomJS.
+    grunt test    #Run unit tests.
     grunt build   #Places a fully optimized (minified, concatenated, and more) in /dist
 
 Yeoman Subgenerators
@@ -75,8 +81,7 @@ Yeoman Subgenerators
 
 There are a set of sub-generators to initialize empty Angular components.  Each of these generators will:
 
-* Create one or more skeleton files (javascript, LESS, html, etc) for the component type
-* Create a skeleton unit test in /test
+* Create one or more skeleton files (javascript, LESS, html, spec etc) for the component type.
 * Update index.html and add the necessary `script` tags.
 * Update app.less and add the @import as needed.
 * For partials, update the setup.js, adding the necessary route call if a route was entered in the generator prompts.
@@ -115,6 +120,7 @@ The build process uses [grunt-dom-munger](https://github.com/cgross/grunt-dom-mu
 
 Release History
 -------------
+* 1/06/2013 - v2.1.0 - Nice enhancements for unit testing.  Specs are now placed in the same directory as the component they're testing.  Additionally, unit tests are now run during `grunt server` allowing for an easy and efficient test-driven workflow.
 * 12/30/2013 - v2.0.0 - Big Update.  Angular 1.2 and Bootstrap 3.  Newer versions of Angular UI, Font Awesome, and JQuery.  Lodash was replaced with Underscore.  Lots of other small changes.
 * 9/06/2013 - V1.0.4 - Fixed templating issue with generated specs for `yo cg-angular:service` subgenerator.
 * 8/29/2013 - V1.0.3 - Renamed `/lib` back to `/bower_components` as clarity trumps brevity.  Renamed `/bin` to `/dist`. Fixed spelling error in generated directive's js template location.  Moved up to later version of `yeoman-generator` dependency to solve "Cannot read bold of undefined" error coming from Yeoman.  JSHint options now read from `.jshintrc`.  And more small stuff.

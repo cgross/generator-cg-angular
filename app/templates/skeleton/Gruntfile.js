@@ -25,17 +25,20 @@ module.exports = function (grunt) {
     watch: {
       main: {
         options: {
-            livereload: true
+            livereload: true,
+            spawn: false
         },
         files: ['js/**/*','css/**/*','img/**/*','partial/**/*','service/**/*','filter/**/*','directive/**/*','index.html'],
-        tasks: ['jshint']
+        tasks: [] //all the tasks are run dynamically during the watch event handler
       }
     },
     jshint: {
-      options: {
-        jshintrc: '.jshintrc'
-      },
-      files: ['js/**/*.js','partial/**/*.js','service/**/*.js','filter/**/*.js','directive/**/*.js']
+      main: {
+        options: {
+            jshintrc: '.jshintrc'
+        },
+        src: ['js/**/*.js','partial/**/*.js','service/**/*.js','filter/**/*.js','directive/**/*.js']
+      }
     },
     clean: {
       before:{
@@ -179,13 +182,46 @@ module.exports = function (grunt) {
       unit: {
         src: ['<%%= dom_munger.data.appjs %>','bower_components/angular-mocks/angular-mocks.js'],
         options: {
-          specs: 'test/unit/**/*.js'
+          keepRunner: true,
+          specs: ['js/**/*-spec.js','partial/**/*-spec.js','service/**/*-spec.js','filter/**/*-spec.js','directive/**/*-spec.js']
         }
       }
     }
   });
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript','htmlmin','imagemin','clean:after']);
-  grunt.registerTask('server', ['jshint','connect', 'watch']);
-  grunt.registerTask('test',['dom_munger:readscripts','jasmine'])
+  grunt.registerTask('server', ['dom_munger:readscripts','jshint','connect', 'watch']);
+  grunt.registerTask('test',['dom_munger:readscripts','jasmine']);
+
+
+  grunt.event.on('watch', function(action, filepath) {
+    //https://github.com/gruntjs/grunt-contrib-watch/issues/156
+
+    if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
+
+      //lint the changed js file
+      grunt.config('jshint.main.src', filepath);
+      grunt.task.run('jshint');
+
+      //find the appropriate unit test for the changed file
+      var spec = filepath;
+      if (filepath.lastIndexOf('-spec.js') === -1 || filepath.lastIndexOf('-spec.js') !== filepath.length - 8) {
+        var spec = filepath.substring(0,filepath.length - 3) + '-spec.js';
+      }
+
+      //if the spec exists then lets run it
+      if (grunt.file.exists(spec)) {
+        grunt.config('jasmine.unit.options.specs',spec);
+        grunt.task.run('jasmine:unit');
+      }
+    }
+
+    //if index.html changed, we need to reread the <script> tags so our next run of jasmine
+    //will have the correct environment
+    if (filepath === 'index.html') {
+      grunt.task.run('dom_munger:readscripts');
+    }
+
+  });
+
 };

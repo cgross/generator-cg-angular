@@ -44,7 +44,7 @@ PartialGenerator.prototype.files = function files() {
 	this.template('partial.js', 'partial/'+this.name+'/'+this.name+'.js');
 	this.template('partial.html', 'partial/'+this.name+'/'+this.name+'.html');
 	this.template('partial.less', 'partial/'+this.name+'/'+this.name+'.less');
-	this.template('spec.js', 'test/unit/controller/'+this.name+'.js');
+	this.template('spec.js', 'partial/'+this.name+'/'+this.name+'-spec.js');
 
 	cgUtils.addToFile('index.html','<script src="partial/'+this.name+'/'+this.name+'.js"></script>',cgUtils.PARTIAL_JS_MARKER,'  ');
 	this.log.writeln(' updating'.green + ' %s','index.html');

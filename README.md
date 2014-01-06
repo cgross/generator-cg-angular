@@ -72,9 +72,11 @@ Grunt Tasks
 
 Now that the project is created, you have 3 simple Grunt commands available:
 
-    grunt server  #This will run a development server with watch & reload enabled.
+    grunt server  #This will run a development server with watch & livereload enabled.
     grunt test    #Run unit tests.
     grunt build   #Places a fully optimized (minified, concatenated, and more) in /dist
+    
+When `grunt server` is running, any changed javascript files will be validated using JSHint as well as have their appropriate unit tests executed.  Only the unit tests that correspond to the changed file will be run.
 
 Yeoman Subgenerators
 -------------

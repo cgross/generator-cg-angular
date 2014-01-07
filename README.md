@@ -101,6 +101,11 @@ The name paramater passed (i.e. 'my-awesome-directive') will be used for directo
 
 One quick note, each sub-generator pulls the Angular app/module name from the package.json.  Therefore, if you choose to change the name of your Angular app/module, you must ensure that the name in the package.json stays in sync.
 
+Preconfigured Libraries
+-------------
+
+The new app will have a handful of preconfigured libraries included.  This includes Angular 1.2, Bootstrap 3, AngularUI Bootstrap, AngularUI Utils, FontAwesome 4, JQuery 2, Underscore 1.5, LESS 1.5, and Moment 2.5.  You may of course add to or remove any of these libraries.  But the work to integrate them into the app and into the build process has already been done for you. 
+
 Build Process
 -------------
 

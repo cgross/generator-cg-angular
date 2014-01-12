@@ -3,6 +3,7 @@ var util = require('util');
 var yeoman = require('yeoman-generator');
 var path = require('path');
 var cgUtils = require('../utils.js');
+var chalk = require('chalk');
 
 var DirectiveGenerator = module.exports = function DirectiveGenerator(args, options, config) {
 
@@ -44,16 +45,16 @@ DirectiveGenerator.prototype.files = function files() {
 		this.template('spec.js', 'directive/'+this.name+'/'+this.name+'-spec.js');
 
 		cgUtils.addToFile('index.html','<script src="directive/'+this.name+'/'+this.name+'.js"></script>',cgUtils.DIRECTIVE_JS_MARKER,'  ');
-		this.log.writeln(' updating'.green + ' %s','index.html');
+		this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 
 		cgUtils.addToFile('css/app.less','@import "../directive/'+this.name+'/'+this.name+'.less";',cgUtils.DIRECTIVE_LESS_MARKER,'');
-		this.log.writeln(' updating'.green + ' %s','app/app.less');
+		this.log.writeln(chalk.green(' updating') + ' %s','app/app.less');
 	} else {
 		this.template('directive_simple.js', 'directive/'+this.name+'.js');
 		this.template('spec.js', 'directive/'+this.name+'-spec.js');
 
 		cgUtils.addToFile('index.html','<script src="directive/'+this.name+'.js"></script>',cgUtils.DIRECTIVE_JS_MARKER,'  ');
-		this.log.writeln(' updating'.green + ' %s','index.html');
+		this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 	}
 
 };

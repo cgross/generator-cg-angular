@@ -3,6 +3,7 @@ var util = require('util');
 var yeoman = require('yeoman-generator');
 var path = require('path');
 var cgUtils = require('../utils.js');
+var chalk = require('chalk');
 var _ = require('underscore');
 
 _.str = require('underscore.string');
@@ -47,14 +48,14 @@ PartialGenerator.prototype.files = function files() {
 	this.template('spec.js', 'partial/'+this.name+'/'+this.name+'-spec.js');
 
 	cgUtils.addToFile('index.html','<script src="partial/'+this.name+'/'+this.name+'.js"></script>',cgUtils.PARTIAL_JS_MARKER,'  ');
-	this.log.writeln(' updating'.green + ' %s','index.html');
+	this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 
 	cgUtils.addToFile('css/app.less','@import "../partial/'+this.name+'/'+this.name+'.less";',cgUtils.PARTIAL_LESS_MARKER,'');
-	this.log.writeln(' updating'.green + ' %s','css/app.less');
+	this.log.writeln(chalk.green(' updating') + ' %s','css/app.less');
 
 	if (this.route && this.route.length > 0){
 		cgUtils.addToFile('js/setup.js','when(\''+this.route+'\',{templateUrl: \'partial/'+this.name+'/'+this.name+'.html\'}).',cgUtils.ROUTE_MARKER,'\t');
-		this.log.writeln(' updating'.green + ' %s','js/setup.js');
+		this.log.writeln(chalk.green(' updating') + ' %s','js/setup.js');
 	}
 
 };

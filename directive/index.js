@@ -41,7 +41,7 @@ DirectiveGenerator.prototype.files = function files() {
 		this.template('directive.js', 'directive/'+this.name+'/'+this.name+'.js');
 		this.template('directive.html', 'directive/'+this.name+'/'+this.name+'.html');
 		this.template('directive.less', 'directive/'+this.name+'/'+this.name+'.less');
-		this.template('spec.js', 'directive/'+this.name+'/'+this.name+'-spec.less');
+		this.template('spec.js', 'directive/'+this.name+'/'+this.name+'-spec.js');
 
 		cgUtils.addToFile('index.html','<script src="directive/'+this.name+'/'+this.name+'.js"></script>',cgUtils.DIRECTIVE_JS_MARKER,'  ');
 		this.log.writeln(' updating'.green + ' %s','index.html');

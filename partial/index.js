@@ -50,7 +50,7 @@ PartialGenerator.prototype.files = function files() {
 	this.log.writeln(' updating'.green + ' %s','index.html');
 
 	cgUtils.addToFile('css/app.less','@import "../partial/'+this.name+'/'+this.name+'.less";',cgUtils.PARTIAL_LESS_MARKER,'');
-	this.log.writeln(' updating'.green + ' %s','app/app.less');
+	this.log.writeln(' updating'.green + ' %s','css/app.less');
 
 	if (this.route && this.route.length > 0){
 		cgUtils.addToFile('js/setup.js','when(\''+this.route+'\',{templateUrl: \'partial/'+this.name+'/'+this.name+'.html\'}).',cgUtils.ROUTE_MARKER,'\t');

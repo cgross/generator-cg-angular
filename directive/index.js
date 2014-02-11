@@ -48,7 +48,7 @@ DirectiveGenerator.prototype.files = function files() {
 		this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 
 		cgUtils.addToFile('css/app.less','@import "../directive/'+this.name+'/'+this.name+'.less";',cgUtils.DIRECTIVE_LESS_MARKER,'');
-		this.log.writeln(chalk.green(' updating') + ' %s','app/app.less');
+		this.log.writeln(chalk.green(' updating') + ' %s','css/app.less');
 	} else {
 		this.template('directive_simple.js', 'directive/'+this.name+'.js');
 		this.template('spec.js', 'directive/'+this.name+'-spec.js');

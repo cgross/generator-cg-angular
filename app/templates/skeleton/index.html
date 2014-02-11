@@ -21,7 +21,7 @@
   <script src="bower_components/underscore/underscore.js"></script>
   <script src="bower_components/moment/moment.js"></script>
   <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="<%= routerJs %>"></script>
   <script src="bower_components/angular-animate/angular-animate.js"></script>
   <script src="bower_components/angular-resource/angular-resource.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
@@ -46,7 +46,7 @@
   <div>
     <div id="content" class="container">
       <div class="row">
-        <div ng-view>
+        <div <%= routerViewDirective %>>
         </div>
       </div>
     </div>

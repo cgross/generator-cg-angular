@@ -22,9 +22,9 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.15",
     "underscore": "~1.5",
     "underscore.string": "~2.3",
+    "yeoman-generator": "~0.16",
     "chalk": "~0.4.0"
   },
   "devDependencies": {

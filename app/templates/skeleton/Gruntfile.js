@@ -1,9 +1,4 @@
 'use strict';
-var path = require('path');
-
-var folderMount = function folderMount(connect, point) {
-  return connect.static(path.resolve(point));
-};
 
 module.exports = function (grunt) {
 
@@ -15,10 +10,7 @@ module.exports = function (grunt) {
     connect: {
       main: {
         options: {
-          port: 9001,
-          middleware: function(connect, options) {
-            return [folderMount(connect, options.base)]
-          }
+          port: 9001
         }
       }
     },
@@ -79,7 +71,6 @@ module.exports = function (grunt) {
     copy: {
       main: {
         files: [
-          {src: ['index.html'], dest: 'dist/'},
           {src: ['img/**'], dest: 'dist/'},
           {src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
           {src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/',filter:'isFile',expand:true}
@@ -89,43 +80,25 @@ module.exports = function (grunt) {
       }
     },
     dom_munger:{
-      readscripts: {
+      read: {
         options: {
-          read:{selector:'script[data-build!="exclude"]',attribute:'src',writeto:'appjs'}
+          read:[
+            {selector:'script[data-build!="exclude"]',attribute:'src',writeto:'appjs'},
+            {selector:'link[rel="stylesheet"]',attribute:'href',writeto:'appcss'}
+          ]
         },
-        src:'index.html'
+        src: 'index.html'
       },
-      readcss: {
+      update: {
         options: {
-          read:{selector:'link[rel="stylesheet"]',attribute:'href',writeto:'appcss'}
+          remove: ['script[data-remove!="exclude"]','link'],
+          append: [
+            {selector:'body',html:'<script src="app.full.min.js"></script>'},
+            {selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
+          ]
         },
-        src:'index.html'
-      },
-      removescripts: {
-        options:{
-          remove:'script[data-remove!="exclude"]',
-          append:{selector:'head',html:'<script src="app.full.min.js"></script>'}
-        },
-        src:'dist/index.html'
-      },
-      addscript: {
-        options:{
-          append:{selector:'body',html:'<script src="app.full.min.js"></script>'}
-        },
-        src:'dist/index.html'
-      },
-      removecss: {
-        options:{
-          remove:'link',
-          append:{selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
-        },
-        src:'dist/index.html'
-      },
-      addcss: {
-        options:{
-          append:{selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
-        },
-        src:'dist/index.html'
+        src:'index.html',
+        dest: 'dist/index.html'
       }
     },
     cssmin: {
@@ -189,9 +162,9 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build',['jshint','clean:before','less','dom_munger:readcss','dom_munger:readscripts','ngtemplates','cssmin','concat','ngmin','uglify','copy','dom_munger:removecss','dom_munger:addcss','dom_munger:removescripts','dom_munger:addscript','htmlmin','imagemin','clean:after']);
-  grunt.registerTask('server', ['dom_munger:readscripts','jshint','connect', 'watch']);
-  grunt.registerTask('test',['dom_munger:readscripts','jasmine']);
+  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
+  grunt.registerTask('server', ['dom_munger:read','jshint','connect', 'watch']);
+  grunt.registerTask('test',['dom_munger:read','jasmine']);
 
 
   grunt.event.on('watch', function(action, filepath) {
@@ -219,7 +192,7 @@ module.exports = function (grunt) {
     //if index.html changed, we need to reread the <script> tags so our next run of jasmine
     //will have the correct environment
     if (filepath === 'index.html') {
-      grunt.task.run('dom_munger:readscripts');
+      grunt.task.run('dom_munger:read');
     }
 
   });

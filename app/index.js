@@ -8,6 +8,10 @@ var CgangularGenerator = module.exports = function CgangularGenerator(args, opti
     yeoman.generators.Base.apply(this, arguments);
 
     this.on('end', function () {
+        this.config.set('partialDirectory','partial/');
+        this.config.set('directiveDirectory','directive/');
+        this.config.set('filterDirectory','filter/');
+        this.config.set('serviceDirectory','service/');
         this.config.save();
         this.installDependencies({ skipInstall: options['skip-install'] });
     });
@@ -38,7 +42,7 @@ CgangularGenerator.prototype.askForUiRouter = function askFor() {
     var prompts = [{
         name: 'router',
         type:'list',
-        message: 'What router would you like to use?',
+        message: 'Which router would you like to use?',
         default: 0,
         choices: ['Standard Angular Router','Angular UI Router']
     }];

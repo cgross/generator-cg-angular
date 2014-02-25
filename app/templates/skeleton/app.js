@@ -10,7 +10,7 @@ angular.module('<%= _.slugify(appname) %>').config(function($routeProvider) {
 <% } %><% if (uirouter) { %>
 angular.module('<%= _.slugify(appname) %>').config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise("/home");
+    $urlRouterProvider.otherwise('/home');
 
     /* Add New States Above */
 

@@ -1,5 +1,9 @@
 var path = require('path');
 var fs = require('fs');
+var _ = require('underscore');
+
+_.str = require('underscore.string');
+_.mixin(_.str.exports());
 
 exports.addToFile = function(filename,lineToAdd,beforeMarker,spacing){
 	try {
@@ -16,12 +20,22 @@ exports.addToFile = function(filename,lineToAdd,beforeMarker,spacing){
 	}
 };
 
-exports.DIRECTIVE_LESS_MARKER = "/* Add Directive LESS Above */";
-exports.DIRECTIVE_JS_MARKER = "<!-- Add New Directive JS Above -->";
-exports.FILTER_JS_MARKER = "<!-- Add New Filter JS Above -->";
-exports.SERVICE_JS_MARKER = "<!-- Add New Service JS Above -->";
-exports.PARTIAL_LESS_MARKER = "/* Add Partial LESS Above */";
-exports.PARTIAL_JS_MARKER = "<!-- Add New Partial JS Above -->";
+exports.JS_MARKER = "<!-- Add New Component JS Above -->";
+exports.LESS_MARKER = "/* Add Component LESS Above */";
 
 exports.ROUTE_MARKER = "/* Add New Routes Above */";
 exports.STATE_MARKER = "/* Add New States Above */";
+
+
+exports.cleanDirectory = function(directoryName) {
+
+	if (_(directoryName).startsWith('/') || _(directoryName).startsWith('\\')) {
+		directoryName = directoryName.substring(1);
+	}
+
+	if (_(directoryName).endsWith('/') || _(directoryName).endsWith('\\')) {
+		directoryName = directoryName.substring(0,directoryName.length - 1);
+	}
+
+	return directoryName + '/';
+};

@@ -20,7 +20,7 @@
     "angular-ui-utils": "~0.1",
     "angular-bootstrap": "~0.9",
     "moment": "~2.5",
-    "less.js": "~1.5",
+    "less.js": "~1.6",
     "font-awesome": "~4.0"
   }
 }

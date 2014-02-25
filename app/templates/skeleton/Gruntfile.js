@@ -1,4 +1,32 @@
+/*jslint node: true */
 'use strict';
+
+//Using exclusion patterns slows down Grunt significantly
+//instead of creating a set of patterns like '**/*.js' and '!**/node_modules/**'
+//this method is used to create a set of inclusive patterns for all subdirectories
+//skipping node_modules, bower_components, dist, and any .dirs
+//This enables users to create any directory structure they desire.
+var createFolderGlobs = function(fileTypePatterns) {
+  fileTypePatterns = Array.isArray(fileTypePatterns) ? fileTypePatterns : [fileTypePatterns];
+  var ignore = ['node_modules','bower_components','dist','temp'];
+  var fs = require('fs');
+  return fs.readdirSync(process.cwd())
+          .map(function(file){
+            if (ignore.indexOf(file) !== -1 ||
+                file.indexOf('.') === 0 ||
+                !fs.lstatSync(file).isDirectory()) {
+              return null;
+            } else {
+              return fileTypePatterns.map(function(pattern) {
+                return file + '/**/' + pattern;
+              });
+            }
+          })
+          .filter(function(patterns){
+            return patterns;
+          })
+          .concat(fileTypePatterns);
+};
 
 module.exports = function (grunt) {
 
@@ -20,7 +48,7 @@ module.exports = function (grunt) {
             livereload: true,
             spawn: false
         },
-        files: ['js/**/*','css/**/*','img/**/*','partial/**/*','service/**/*','filter/**/*','directive/**/*','index.html'],
+        files: [createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt'],
         tasks: [] //all the tasks are run dynamically during the watch event handler
       }
     },
@@ -29,7 +57,7 @@ module.exports = function (grunt) {
         options: {
             jshintrc: '.jshintrc'
         },
-        src: ['js/**/*.js','partial/**/*.js','service/**/*.js','filter/**/*.js','directive/**/*.js']
+        src: createFolderGlobs('*.js')
       }
     },
     clean: {
@@ -45,7 +73,7 @@ module.exports = function (grunt) {
         options: {
         },
         files: {
-          "temp/app.css": "css/app.less"
+          'temp/app.css': 'app.less'
         }
       }
     },
@@ -53,18 +81,9 @@ module.exports = function (grunt) {
       main: {
         options: {
             module:'<%= _.slugify(appname) %>',
-            htmlmin: {
-              collapseBooleanAttributes: true,
-              collapseWhitespace: true,
-              removeAttributeQuotes: true,
-              removeComments: true,
-              removeEmptyAttributes: true,
-              removeRedundantAttributes: true,
-              removeScriptTypeAttributes: true,
-              removeStyleLinkTypeAttributes: true
-            }
+            htmlmin:'<%= htmlmin.main.options %>'
         },
-        src: [ 'partial/**/*.html','directive/**/*.html' ],
+        src: [createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html'],
         dest: 'temp/templates.js'
       }
     },
@@ -72,10 +91,10 @@ module.exports = function (grunt) {
       main: {
         files: [
           {src: ['img/**'], dest: 'dist/'},
-          {src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
           {src: ['bower_components/font-awesome/fonts/**'], dest: 'dist/',filter:'isFile',expand:true}
-          // {src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
-          // {src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
+          //{src: ['bower_components/angular-ui-utils/ui-utils-ieshiv.min.js'], dest: 'dist/'},
+          //{src: ['bower_components/select2/*.png','bower_components/select2/*.gif'], dest:'dist/css/',flatten:true,expand:true},
+          //{src: ['bower_components/angular-mocks/angular-mocks.js'], dest: 'dist/'}
         ]
       }
     },
@@ -94,7 +113,7 @@ module.exports = function (grunt) {
           remove: ['script[data-remove!="exclude"]','link'],
           append: [
             {selector:'body',html:'<script src="app.full.min.js"></script>'},
-            {selector:'head',html:'<link rel="stylesheet" href="css/app.full.min.css">'}
+            {selector:'head',html:'<link rel="stylesheet" href="app.full.min.css">'}
           ]
         },
         src:'index.html',
@@ -104,7 +123,7 @@ module.exports = function (grunt) {
     cssmin: {
       main: {
         src:['temp/app.css','<%%= dom_munger.data.appcss %>'],
-        dest:'dist/css/app.full.min.css'
+        dest:'dist/app.full.min.css'
       }
     },
     concat: {
@@ -153,17 +172,17 @@ module.exports = function (grunt) {
     },
     jasmine: {
       unit: {
-        src: ['<%%= dom_munger.data.appjs %>','bower_components/angular-mocks/angular-mocks.js'],
+        src: ['<%= dom_munger.data.appjs %>','bower_components/angular-mocks/angular-mocks.js'],
         options: {
-          keepRunner: true,
-          specs: ['js/**/*-spec.js','partial/**/*-spec.js','service/**/*-spec.js','filter/**/*-spec.js','directive/**/*-spec.js']
+          keepRunner: false,
+          specs: createFolderGlobs('*-spec.js')
         }
       }
     }
   });
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
-  grunt.registerTask('server', ['dom_munger:read','jshint','connect', 'watch']);
+  grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:read','jasmine']);
 
 
@@ -179,7 +198,7 @@ module.exports = function (grunt) {
       //find the appropriate unit test for the changed file
       var spec = filepath;
       if (filepath.lastIndexOf('-spec.js') === -1 || filepath.lastIndexOf('-spec.js') !== filepath.length - 8) {
-        var spec = filepath.substring(0,filepath.length - 3) + '-spec.js';
+        spec = filepath.substring(0,filepath.length - 3) + '-spec.js';
       }
 
       //if the spec exists then lets run it
@@ -196,5 +215,4 @@ module.exports = function (grunt) {
     }
 
   });
-
 };

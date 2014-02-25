@@ -4,6 +4,10 @@ var yeoman = require('yeoman-generator');
 var path = require('path');
 var cgUtils = require('../utils.js');
 var chalk = require('chalk');
+var _ = require('underscore');
+
+_.str = require('underscore.string');
+_.mixin(_.str.exports());
 
 var DirectiveGenerator = module.exports = function DirectiveGenerator(args, options, config) {
 
@@ -21,39 +25,56 @@ util.inherits(DirectiveGenerator, yeoman.generators.NamedBase);
 
 DirectiveGenerator.prototype.askFor = function askFor() {
 	var cb = this.async();
+	var name = this.name;
+    var defaultDir = this.config.get('directiveDirectory');
+    if (!_(defaultDir).endsWith('/')) {
+        defaultDir += '/';
+    }
 
 	var prompts = [{
 		type:'confirm',
 		name: 'needpartial',
 		message: 'Does this directive need an external html file (i.e. partial)?',
 		default: true
+	},{
+		name:'dir',
+		message:'Where would you like to create the directive files?',
+		default: function(props){
+			if (props.needpartial){
+				return defaultDir + name + '/';
+			} else {
+				return defaultDir;
+			}
+		}
 	}];
 
 	this.prompt(prompts, function (props) {
 		this.needpartial = props.needpartial;
+		this.dir = cgUtils.cleanDirectory(props.dir);
 
 		cb();
 	}.bind(this));
+
 };
 
 DirectiveGenerator.prototype.files = function files() {
 
 	if (this.needpartial){
-		this.template('directive.js', 'directive/'+this.name+'/'+this.name+'.js');
-		this.template('directive.html', 'directive/'+this.name+'/'+this.name+'.html');
-		this.template('directive.less', 'directive/'+this.name+'/'+this.name+'.less');
-		this.template('spec.js', 'directive/'+this.name+'/'+this.name+'-spec.js');
+		this.template('directive.js', this.dir+this.name+'.js');
+		this.template('directive.html', this.dir+this.name+'.html');
+		this.template('directive.less', this.dir+this.name+'.less');
+		this.template('spec.js', this.dir+this.name+'-spec.js');
 
-		cgUtils.addToFile('index.html','<script src="directive/'+this.name+'/'+this.name+'.js"></script>',cgUtils.DIRECTIVE_JS_MARKER,'  ');
+		cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
 		this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 
-		cgUtils.addToFile('css/app.less','@import "../directive/'+this.name+'/'+this.name+'.less";',cgUtils.DIRECTIVE_LESS_MARKER,'');
-		this.log.writeln(chalk.green(' updating') + ' %s','css/app.less');
+		cgUtils.addToFile('app.less','@import "' +this.dir+this.name+'.less";',cgUtils.LESS_MARKER,'');
+		this.log.writeln(chalk.green(' updating') + ' %s','app.less');
 	} else {
-		this.template('directive_simple.js', 'directive/'+this.name+'.js');
-		this.template('spec.js', 'directive/'+this.name+'-spec.js');
+		this.template('directive_simple.js', this.dir+this.name+'.js');
+		this.template('spec.js', this.dir+this.name+'-spec.js');
 
-		cgUtils.addToFile('index.html','<script src="directive/'+this.name+'.js"></script>',cgUtils.DIRECTIVE_JS_MARKER,'  ');
+		cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
 		this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 	}
 

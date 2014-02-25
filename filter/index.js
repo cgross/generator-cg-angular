@@ -4,6 +4,10 @@ var yeoman = require('yeoman-generator');
 var path = require('path');
 var cgUtils = require('../utils.js');
 var chalk = require('chalk');
+var _ = require('underscore');
+
+_.str = require('underscore.string');
+_.mixin(_.str.exports());
 
 var FilterGenerator = module.exports = function FilterGenerator(args, options, config) {
 
@@ -19,10 +23,33 @@ var FilterGenerator = module.exports = function FilterGenerator(args, options, c
 
 util.inherits(FilterGenerator, yeoman.generators.NamedBase);
 
-FilterGenerator.prototype.files = function files() {
-	this.template('filter.js', 'filter/'+this.name+'.js');
-	this.template('spec.js', 'filter/'+this.name+'-spec.js');
+FilterGenerator.prototype.askFor = function askFor() {
+    var cb = this.async();
+    var name = this.name;
+    var defaultDir = this.config.get('filterDirectory');
+    if (!_(defaultDir).endsWith('/')) {
+        defaultDir += '/';
+    }
 
-	cgUtils.addToFile('index.html','<script src="filter/'+this.name+'.js"></script>',cgUtils.FILTER_JS_MARKER,'  ');
+    var prompts = [
+        {
+            name:'dir',
+            message:'Where would you like to create the filter files?',
+            default: defaultDir
+        }
+    ];
+
+    this.prompt(prompts, function (props) {
+        this.dir = cgUtils.cleanDirectory(props.dir);
+
+        cb();
+    }.bind(this));
+};
+
+FilterGenerator.prototype.files = function files() {
+	this.template('filter.js', this.dir+this.name+'.js');
+	this.template('spec.js', this.dir+this.name+'-spec.js');
+
+	cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
 	this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 };

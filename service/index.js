@@ -4,6 +4,10 @@ var yeoman = require('yeoman-generator');
 var path = require('path');
 var cgUtils = require('../utils.js');
 var chalk = require('chalk');
+var _ = require('underscore');
+
+_.str = require('underscore.string');
+_.mixin(_.str.exports());
 
 var ServiceGenerator = module.exports = function ServiceGenerator(args, options, config) {
 
@@ -19,10 +23,33 @@ var ServiceGenerator = module.exports = function ServiceGenerator(args, options,
 
 util.inherits(ServiceGenerator, yeoman.generators.NamedBase);
 
-ServiceGenerator.prototype.files = function files() {
-	this.template('service.js', 'service/'+this.name+'.js');
-	this.template('spec.js', 'service/'+this.name+'-spec.js');
+ServiceGenerator.prototype.askFor = function askFor() {
+    var cb = this.async();
+    var name = this.name;
+    var defaultDir = this.config.get('serviceDirectory');
+    if (!_(defaultDir).endsWith('/')) {
+        defaultDir += '/';
+    }
 
-	cgUtils.addToFile('index.html','<script src="service/'+this.name+'.js"></script>',cgUtils.SERVICE_JS_MARKER,'  ');
+    var prompts = [
+        {
+            name:'dir',
+            message:'Where would you like to create the service files?',
+            default: defaultDir
+        }
+    ];
+
+    this.prompt(prompts, function (props) {
+        this.dir = cgUtils.cleanDirectory(props.dir);
+
+        cb();
+    }.bind(this));
+};
+
+ServiceGenerator.prototype.files = function files() {
+	this.template('service.js', this.dir+this.name+'.js');
+	this.template('spec.js', this.dir+this.name+'-spec.js');
+
+	cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
 	this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 };

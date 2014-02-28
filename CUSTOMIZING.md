@@ -1,0 +1,67 @@
+Customizing the Sub-generators
+-------------
+
+You may need to customize the sub-generators if you use things like SASS, RequireJS, and more.  The sub-generators can be extended and overriden through the `.yo-rc.json` file.  The `.yo-rc.json` file can be configured with the following properties:
+
+#### partialTemplates
+Type: `String`
+
+Directory to load partial template files from.
+
+#### directiveSimpleTemplates
+Type: `String`
+
+Directory to load directive template files from if the user has chosen to create a directive without an external partial.
+
+#### directiveComplexTemplates
+Type: `String`
+
+Directory to load directive template files from if the user has chosen to create a directive with an external partial.
+
+#### serviceTemplates
+Type: `String`
+
+Directory to load service template files from.
+
+#### filterTemplates
+Type: `String`
+
+Directory to load filter template files from
+
+#### injector
+Type: `String`
+
+A NodeJS module name (path relative to the `.yo-rc.json`).  The module must export one function.  That function can extend or override the standard reference injecting logic of the generator (i.e. injecting <script> tags in index.html or injecting @import statements in the app.less).  The function takes two arguments: the `filename` of the file that may need injection and a `logger` function that can be used to write output.  Return `true` from this function to prevent standard reference injecting logic for the given filename.  Otherwise, the standard reference injecting logic will be executed after this function is complete.  For example, if you've overriden one or more of the templates for a given sub-generator and included a new `.scss` template, you may need to inject an @import statement into your primary scss file.
+
+## Example Configuration
+
+Here is an example configuration that matches the default behavior of the sub-generators:
+
+```js
+{
+	uirouter: false,
+	partialDirectory: "partial/",
+	directiveDirectory: "directive/",
+	serviceDirectory: "service/",
+	filterDirectory: "filter/",
+	partialTemplates: "templates/partial",
+	directiveSimpleTemplates: "templates/simpleDirective",
+	directiveComplexTemplates: "templates/complexDirective",
+	serviceTemplates: "templates/service",
+	filterTemplates: "templates/filter",
+	injector: "lib/myInjector.js"
+}
+```
+
+## Template Directories
+
+Each template directory can contain any number of files for a given sub-generator.  Each file will be read, run through the template engine, and then saved to the user specified destination.  The name of the destination file will be derived from the name of the template file after a word replacement has been done.  Each type of sub-generator will replace the sub-generator type word in the name with the user specified component name.  In other words, a template file named partial-spec.js, when the user creates a component named my-component, will turn into a destination file named my-component-spec.js.
+
+### Template variables
+
+All templates are valid underscore templates using the standard ERB-style delimiters.  The templates will also have the following variables:
+
+* `appname` - name of the Angular app/module name
+* `name` - the name of the component entered by the user
+* `ctrlname` - (partials only) name of the controller
+* `_` - Underscore.js with Underscore.string mixed in.  This allows you to use code like `<%= _.camelize(name) %>` in the templates.

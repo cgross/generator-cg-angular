@@ -59,7 +59,7 @@ PartialGenerator.prototype.files = function files() {
 
     var templateDirectory = path.join(path.dirname(this.resolved),'templates');
     if(this.config.get('partialTemplates')){
-        templateDirectory = path.join(process.cwd(),this.config.get('partialTemplates')); 
+        templateDirectory = path.join(process.cwd(),this.config.get('partialTemplates'));
     }
     var that = this;
     _.chain(fs.readdirSync(templateDirectory))
@@ -69,18 +69,16 @@ PartialGenerator.prototype.files = function files() {
         .each(function(template){
             var customTemplateName = template.replace('partial',that.name);
             var templateFile = path.join(templateDirectory,template);
-            that.template(templateFile,that.dir+ customTemplateName);
+            //create the file
+            that.template(templateFile,that.dir + customTemplateName);
+            //inject the file reference into index.html/app.less/etc as appropriate
+            cgUtils.doInjection(that.dir + customTemplateName,that.log,that.config);
         });
 
-    cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
-    this.log.writeln(chalk.green(' updating') + ' %s','index.html');
-
-    cgUtils.addToFile('app.less','@import "'+this.dir+this.name+'.less";',cgUtils.LESS_MARKER,'');
-    this.log.writeln(chalk.green(' updating') + ' %s','app.less');
 
     if (this.route && this.route.length > 0){
 
-        var partialUrl = this.dir+this.name+'.html';
+        var partialUrl = this.dir + this.name + '.html';
 
         if (this.config.get('uirouter')) {
             var code = '$stateProvider.state(\''+this.name+'\', {\n        url: \''+this.route+'\',\n        templateUrl: \''+partialUrl+'\'\n    });';

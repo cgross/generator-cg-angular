@@ -51,7 +51,7 @@ FilterGenerator.prototype.files = function files() {
 
     var templateDirectory = path.join(path.dirname(this.resolved),'templates');
     if(this.config.get('filterTemplates')){
-        templateDirectory = path.join(process.cwd(),this.config.get('filterTemplates')); 
+        templateDirectory = path.join(process.cwd(),this.config.get('filterTemplates'));
     }
     var that = this;
     _.chain(fs.readdirSync(templateDirectory))
@@ -61,9 +61,9 @@ FilterGenerator.prototype.files = function files() {
         .each(function(template){
             var customTemplateName = template.replace('filter',that.name);
             var templateFile = path.join(templateDirectory,template);
-            that.template(templateFile,that.dir+ customTemplateName);
+            //create the file
+            that.template(templateFile,that.dir + customTemplateName);
+            //inject the file reference into index.html/app.less/etc as appropriate
+            cgUtils.doInjection(that.dir + customTemplateName,that.log,that.config);
         });
-
-	cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
-	this.log.writeln(chalk.green(' updating') + ' %s','index.html');
 };

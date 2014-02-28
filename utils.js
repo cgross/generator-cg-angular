@@ -1,6 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 var _ = require('underscore');
+var chalk = require('chalk');
 
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
@@ -38,4 +39,25 @@ exports.cleanDirectory = function(directoryName) {
 	}
 
 	return directoryName + '/';
+};
+
+exports.doInjection = function(filename,logger,config) {
+	if (config.get('injector')) {
+		var overridenInjector = require(path.join(process.cwd(),config.get('injector')));
+		if (overridenInjector(filename,logger)) {
+			return;
+		}
+	}
+	exports.defaultInjector(filename,logger);
+}
+
+exports.defaultInjector = function(filename,logger) {
+	if (path.extname(filename) === '.js' && !_(filename).endsWith('-spec.js')) {
+		exports.addToFile('index.html','<script src="' + filename + '"></script>',exports.JS_MARKER,'  ');
+		logger.writeln(chalk.green(' updating') + ' %s','index.html');
+	} else if (path.extname(filename) === '.less') {
+		exports.addToFile('app.less','@import "' + filename + '";',exports.LESS_MARKER,'');
+		logger.writeln(chalk.green(' updating') + ' %s','app.less');
+	}
+
 };

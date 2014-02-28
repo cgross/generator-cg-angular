@@ -81,7 +81,7 @@ module.exports = function (grunt) {
       main: {
         options: {
             module:'<%= _.slugify(appname) %>',
-            htmlmin:'<%= htmlmin.main.options %>'
+            htmlmin:'<%%= htmlmin.main.options %>'
         },
         src: [createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html'],
         dest: 'temp/templates.js'
@@ -172,7 +172,7 @@ module.exports = function (grunt) {
     },
     jasmine: {
       unit: {
-        src: ['<%= dom_munger.data.appjs %>','bower_components/angular-mocks/angular-mocks.js'],
+        src: ['<%%= dom_munger.data.appjs %>','bower_components/angular-mocks/angular-mocks.js'],
         options: {
           keepRunner: false,
           specs: createFolderGlobs('*-spec.js')

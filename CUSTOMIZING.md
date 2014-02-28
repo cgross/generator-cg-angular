@@ -31,7 +31,7 @@ Directory to load filter template files from
 #### injector
 Type: `String`
 
-A NodeJS module name (path relative to the `.yo-rc.json`).  The module must export one function.  That function can extend or override the standard reference injecting logic of the generator (i.e. injecting <script> tags in index.html or injecting @import statements in the app.less).  The function takes two arguments: the `filename` of the file that may need injection and a `logger` function that can be used to write output.  Return `true` from this function to prevent standard reference injecting logic for the given filename.  Otherwise, the standard reference injecting logic will be executed after this function is complete.  For example, if you've overriden one or more of the templates for a given sub-generator and included a new `.scss` template, you may need to inject an @import statement into your primary scss file.
+A NodeJS module name (path relative to the `.yo-rc.json`).  The module must export one function.  That function can extend or override the standard reference injecting logic of the generator (i.e. injecting &lt;script&gt; tags in index.html or injecting @import statements in the app.less).  The function takes two arguments: the `filename` of the file that may need injection and a `logger` function that can be used to write output.  Return `true` from this function to prevent standard reference injecting logic for the given filename.  Otherwise, the standard reference injecting logic will be executed after this function is complete.  For example, if you've overriden one or more of the templates for a given sub-generator and included a new `.scss` template, you may need to inject an @import statement into your primary scss file.
 
 ## Example Configuration
 
@@ -52,6 +52,8 @@ Here is an example configuration that matches the default behavior of the sub-ge
 	injector: "lib/myInjector.js"
 }
 ```
+
+If a given template property is missing, the default templates will be used.
 
 ## Template Directories
 

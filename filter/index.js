@@ -5,6 +5,7 @@ var path = require('path');
 var cgUtils = require('../utils.js');
 var chalk = require('chalk');
 var _ = require('underscore');
+var fs = require('fs');
 
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
@@ -47,8 +48,21 @@ FilterGenerator.prototype.askFor = function askFor() {
 };
 
 FilterGenerator.prototype.files = function files() {
-	this.template('filter.js', this.dir+this.name+'.js');
-	this.template('spec.js', this.dir+this.name+'-spec.js');
+
+    var templateDirectory = path.join(path.dirname(this.resolved),'templates');
+    if(this.config.get('filterTemplates')){
+        templateDirectory = path.join(process.cwd(),this.config.get('filterTemplates')); 
+    }
+    var that = this;
+    _.chain(fs.readdirSync(templateDirectory))
+        .filter(function(template){
+            return template[0] !== '.';
+        })
+        .each(function(template){
+            var customTemplateName = template.replace('filter',that.name);
+            var templateFile = path.join(templateDirectory,template);
+            that.template(templateFile,that.dir+ customTemplateName);
+        });
 
 	cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
 	this.log.writeln(chalk.green(' updating') + ' %s','index.html');

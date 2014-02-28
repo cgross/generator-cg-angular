@@ -6,6 +6,7 @@ var fs = require('fs');
 var cgUtils = require('../utils.js');
 var _ = require('underscore');
 var chalk = require('chalk');
+var fs = require('fs');
 
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
@@ -56,10 +57,20 @@ PartialGenerator.prototype.files = function files() {
 
     this.ctrlname = _.camelize(_.classify(this.name)) + 'Ctrl';
 
-    this.template('partial.js', this.dir+this.name+'.js');
-    this.template('partial.html', this.dir+this.name+'.html');
-    this.template('partial.less', this.dir+this.name+'.less');
-    this.template('spec.js', this.dir+this.name+'-spec.js');
+    var templateDirectory = path.join(path.dirname(this.resolved),'templates');
+    if(this.config.get('partialTemplates')){
+        templateDirectory = path.join(process.cwd(),this.config.get('partialTemplates')); 
+    }
+    var that = this;
+    _.chain(fs.readdirSync(templateDirectory))
+        .filter(function(template){
+            return template[0] !== '.';
+        })
+        .each(function(template){
+            var customTemplateName = template.replace('partial',that.name);
+            var templateFile = path.join(templateDirectory,template);
+            that.template(templateFile,that.dir+ customTemplateName);
+        });
 
     cgUtils.addToFile('index.html','<script src="'+this.dir+this.name+'.js"></script>',cgUtils.JS_MARKER,'  ');
     this.log.writeln(chalk.green(' updating') + ' %s','index.html');

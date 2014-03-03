@@ -9,7 +9,7 @@ Features
     * All files related to a conceptual unit are placed together.  For example, the controller, HTML, LESS, and unit test for a partial are placed together in the same directory.
 * Provides a ready-made Grunt build that produces an extremely optimized distribution.
    * Build uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) so you don't have to use the Angular injection syntax for safe minification (i.e. you dont need `$inject` or `(['$scope','$http',...`.
-   * `grunt server` task allows you to run a simple development server with watch/livereload enabled.  Additionally, JSHint and the appropriate unit tests are run for the changed files.
+   * `grunt serve` task allows you to run a simple development server with watch/livereload enabled.  Additionally, JSHint and the appropriate unit tests are run for the changed files.
 * Integrates Bower for package management
 * Includes Yeoman sub-generators for directives, services, partials, and filters
 * Integrates LESS and includes Bootstrap via the source LESS files allowing you to reuse Bootstrap vars/mixins/etc.
@@ -17,38 +17,43 @@ Features
 
 Directory Layout
 -------------
-Below is an explanation of the folder structure.
+Below is an example of the folder structure.  In v3.0, all sub-generators for partials, services, directives, and filters, allow the user to specify where to save the new files.  Thus you can create your own directory structure (including nesting) as you desire.  In this example, the user has chosen to group the app into an `admin` folder, a `search` folder, and a `service` folder.
 
-    /css ........................... usually only contains app.less
-        app.less ................... main app-wide styles
-    /img ........................... images (not created by default but included in /dist if added)
-    /js ............................ app global javascript files
-        setup.js ................... angular module initialization and route setup
-    /directive ..................... angular directives folder
-        my-directive.js ............ example simple directive
-        my-directive-spec.js ....... example simple directive unit test
-        /my-directive2 ............. example complex directive (contains external partial)
-            my-directive2.js ....... complex directive javascript
-            my-directive2.html...... complex directive partial
-            my-directive2.less ..... complex directive LESS
-            my-directive2-spec.js .. complex directive unit test
-    /filter ........................ angular filters folder
-        my-filter.js ............... example filter
-        my-filter-spec.js .......... example filter unit test
-    /partial ....................... angular partials folder
-        /my-partial ................ example partial
-            my-partial.html ........ example partial html
-            my-partial.js .......... example partial controller
-            my-partial.less ........ example partial LESS
-            my-partial-spec.js ..... example partial unit test
+
+    app.less ....................... main app-wide styles
+    app.js ......................... angular module initialization and route setup
+    index.html ..................... main HTML file
+    /admin ......................... example admin component folder
+      /admin-directive1 ............ angular directives folder
+        admin-directive1.js ........ example simple directive
+        admin-directive-spec1.j..... example simple directive unit test
+      /admin-directive2 ............ example complex directive (contains external partial)
+        admin-directive2.js ........ complex directive javascript
+        admin-directive2.html ...... complex directive partial
+        admin-directive2.less ...... complex directive LESS
+        admin-directive2-spec.js ... complex directive unit test
+      /admin-partial ............... example partial
+        admin-partial.html ......... example partial html
+        admin-partial.js ........... example partial controller
+        admin-partial.less ......... example partial LESS
+        admin-partial-spec.js ...... example partial unit test
+    /search ........................ example search component folder
+      my-filter.js ................. example filter
+      my-filter-spec.js ............ example filter unit test
+      /search-partial .............. example partial
+        search-partial.html ........ example partial html
+        search-partial.js .......... example partial controller
+        search-partial.less ........ example partial LESS
+        search-partial-spec.js ..... example partial unit test
     /service ....................... angular services folder
         my-service.js .............. example service
         my-service-spec.js ......... example service unit test
+        my-service2.js ............. example service
+        my-service2-spec.js ........ example service unit test
+    /img ........................... images (not created by default but included in /dist if added)
     /dist .......................... distributable version of app built using grunt and Gruntfile.js
     /bower_component................ 3rd party libraries managed by bower
     /node_modules .................. npm managed libraries used by grunt
-
-The `directive`, `filter`, `partial`, and `service` directories won't exist until one of the relevant components is created using a sub-generator.
 
 Getting Started
 -------------
@@ -72,11 +77,11 @@ Grunt Tasks
 
 Now that the project is created, you have 3 simple Grunt commands available:
 
-    grunt server  #This will run a development server with watch & livereload enabled.
+    grunt serve   #This will run a development server with watch & livereload enabled.
     grunt test    #Run unit tests.
     grunt build   #Places a fully optimized (minified, concatenated, and more) in /dist
 
-When `grunt server` is running, any changed javascript files will be validated using JSHint as well as have their appropriate unit tests executed.  Only the unit tests that correspond to the changed file will be run.
+When `grunt serve` is running, any changed javascript files will be linted using JSHint as well as have their appropriate unit tests executed.  Only the unit tests that correspond to the changed file will be run.
 
 Yeoman Subgenerators
 -------------
@@ -86,7 +91,7 @@ There are a set of sub-generators to initialize empty Angular components.  Each 
 * Create one or more skeleton files (javascript, LESS, html, spec etc) for the component type.
 * Update index.html and add the necessary `script` tags.
 * Update app.less and add the @import as needed.
-* For partials, update the setup.js, adding the necessary route call if a route was entered in the generator prompts.
+* For partials, update the app.js, adding the necessary route call if a route was entered in the generator prompts.
 
 There are generators for `directive`,`partial`,`service`, and `filter`.
 
@@ -97,14 +102,16 @@ Running a generator:
     yo cg-angular:service my-service
     yo cg-angular:filter my-filter
 
-The name paramater passed (i.e. 'my-awesome-directive') will be used for directory and/or file names.  The generators will derive appropriate class names from this parameter (ex. 'my-awesome-directive' will convert to a class name of 'MyAwesomeDirective').
+The name paramater passed (i.e. 'my-awesome-directive') will be used the file names.  The generators will derive appropriate class names from this parameter (ex. 'my-awesome-directive' will convert to a class name of 'MyAwesomeDirective').  Each sub-generator will ask for the folder in which to create the new skeleton files.  You may override the default folder for each sub-generator in the `.yo-rc.json` file.
 
-One quick note, each sub-generator pulls the Angular app/module name from the package.json.  Therefore, if you choose to change the name of your Angular app/module, you must ensure that the name in the package.json stays in sync.
+Each sub-generator pulls the Angular app/module name from the package.json.  Therefore, if you choose to change the name of your Angular app/module, you must ensure that the name in the package.json stays in sync.
+
+Sub-generators are also customizable.  Please read [CUSTOMIZING.md](CUSTOMIZING.md) for details.
 
 Preconfigured Libraries
 -------------
 
-The new app will have a handful of preconfigured libraries included.  This includes Angular 1.2, Bootstrap 3, AngularUI Bootstrap, AngularUI Utils, FontAwesome 4, JQuery 2, Underscore 1.5, LESS 1.5, and Moment 2.5.  You may of course add to or remove any of these libraries.  But the work to integrate them into the app and into the build process has already been done for you.
+The new app will have a handful of preconfigured libraries included.  This includes Angular 1.2, Bootstrap 3, AngularUI Bootstrap, AngularUI Utils, FontAwesome 4, JQuery 2, Underscore 1.5, LESS 1.6, and Moment 2.5.  You may of course add to or remove any of these libraries.  But the work to integrate them into the app and into the build process has already been done for you.
 
 Build Process
 -------------
@@ -129,6 +136,7 @@ Importantly, `grunt-dom-munger` uses JQuery selectors to manage the parsing of t
 
 Release History
 -------------
+* 3/03/2014 - v3.0.0 - All sub-generators now ask the user for a directory enabling any user-defined project structure.  Gruntfile has been altered to allow scripts, partials, and LESS files to be located anywhere in the project directory structure.  An option to use `angular-ui-router` is now available when initializing a new project. `js/setup.js` and `css/app.less` moved to `app.js` and `app.less`.  `grunt server` is now `grunt serve`.  Inside `index.html` all user script tags are grouped together instead of split out into groups for services/filters/etc.  New ability to customize the sub-generators.
 * 2/10/2014 - v2.1.1 - Fix for the directive spec file named with a .less extension.
 * 1/06/2014 - v2.1.0 - Nice enhancements for unit testing.  Specs are now placed in the same directory as the component they're testing.  Additionally, unit tests are now run during `grunt server` allowing for an easy and efficient test-driven workflow.
 * 12/30/2013 - v2.0.0 - Big Update.  Angular 1.2 and Bootstrap 3.  Newer versions of Angular UI, Font Awesome, and JQuery.  Lodash was replaced with Underscore.  Lots of other small changes.

@@ -28,10 +28,10 @@ Type: `String`
 
 Directory to load filter template files from
 
-#### injector
-Type: `String`
+#### inject
+Type: `Object`
 
-A NodeJS module name (path relative to the `.yo-rc.json`).  The module must export one function.  That function can extend or override the standard reference injecting logic of the generator (i.e. injecting &lt;script&gt; tags in index.html or injecting @import statements in the app.less).  The function takes two arguments: the `filename` of the file that may need injection and a `logger` function that can be used to write output.  Return `true` from this function to prevent standard reference injecting logic for the given filename.  Otherwise, the standard reference injecting logic will be executed after this function is complete.  For example, if you've overriden one or more of the templates for a given sub-generator and included a new `.scss` template, you may need to inject an @import statement into your primary scss file.
+A map of file extensions where each extension key contains another map containing 3 properties (file, template, marker).  The sub-generators use these options to inject script tags and import statements.  These options can be extended to add new file types, or override to change the existing injection behavior.
 
 ## Example Configuration
 
@@ -49,7 +49,18 @@ Here is an example configuration that matches the default behavior of the sub-ge
 	directiveComplexTemplates: "templates/complexDirective",
 	serviceTemplates: "templates/service",
 	filterTemplates: "templates/filter",
-	injector: "lib/myInjector.js"
+    "inject": {
+      "js": {
+        "file": "index.html",
+        "marker": "<!-- Add New Component JS Above -->",
+        "template": "<script src=\"<%= filename %>\"></script>"
+      },
+      "less": {
+        "file": "app.less",
+        "marker": "/* Add Component LESS Above */",
+        "template": "@import \"<%= filename %>\";"
+      }
+    }	
 }
 ```
 

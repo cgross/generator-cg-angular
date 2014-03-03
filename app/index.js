@@ -2,7 +2,7 @@
 var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
-
+var cgUtils = require('../utils.js');
 
 var CgangularGenerator = module.exports = function CgangularGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -12,6 +12,19 @@ var CgangularGenerator = module.exports = function CgangularGenerator(args, opti
         this.config.set('directiveDirectory','directive/');
         this.config.set('filterDirectory','filter/');
         this.config.set('serviceDirectory','service/');
+        var inject = {
+            js: { 
+                file: 'index.html', 
+                marker: cgUtils.JS_MARKER,
+                template: '<script src="<%= filename %>"></script>'
+            },
+            less: {
+                file: 'app.less', 
+                marker: cgUtils.LESS_MARKER,
+                template: '@import "<%= filename %>";'
+            }
+        };
+        this.config.set('inject',inject);
         this.config.save();
         this.installDependencies({ skipInstall: options['skip-install'] });
     });

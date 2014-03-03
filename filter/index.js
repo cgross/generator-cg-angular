@@ -49,21 +49,6 @@ FilterGenerator.prototype.askFor = function askFor() {
 
 FilterGenerator.prototype.files = function files() {
 
-    var templateDirectory = path.join(path.dirname(this.resolved),'templates');
-    if(this.config.get('filterTemplates')){
-        templateDirectory = path.join(process.cwd(),this.config.get('filterTemplates'));
-    }
-    var that = this;
-    _.chain(fs.readdirSync(templateDirectory))
-        .filter(function(template){
-            return template[0] !== '.';
-        })
-        .each(function(template){
-            var customTemplateName = template.replace('filter',that.name);
-            var templateFile = path.join(templateDirectory,template);
-            //create the file
-            that.template(templateFile,that.dir + customTemplateName);
-            //inject the file reference into index.html/app.less/etc as appropriate
-            cgUtils.doInjection(that.dir + customTemplateName,that.log,that.config);
-        });
+    cgUtils.processTemplates(this.name,this.dir,'filter',this);
+    
 };

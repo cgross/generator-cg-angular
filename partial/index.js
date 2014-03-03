@@ -57,24 +57,7 @@ PartialGenerator.prototype.files = function files() {
 
     this.ctrlname = _.camelize(_.classify(this.name)) + 'Ctrl';
 
-    var templateDirectory = path.join(path.dirname(this.resolved),'templates');
-    if(this.config.get('partialTemplates')){
-        templateDirectory = path.join(process.cwd(),this.config.get('partialTemplates'));
-    }
-    var that = this;
-    _.chain(fs.readdirSync(templateDirectory))
-        .filter(function(template){
-            return template[0] !== '.';
-        })
-        .each(function(template){
-            var customTemplateName = template.replace('partial',that.name);
-            var templateFile = path.join(templateDirectory,template);
-            //create the file
-            that.template(templateFile,that.dir + customTemplateName);
-            //inject the file reference into index.html/app.less/etc as appropriate
-            cgUtils.doInjection(that.dir + customTemplateName,that.log,that.config);
-        });
-
+    cgUtils.processTemplates(this.name,this.dir,'partial',this);    
 
     if (this.route && this.route.length > 0){
 

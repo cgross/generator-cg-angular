@@ -39,16 +39,16 @@ Here is an example configuration that matches the default behavior of the sub-ge
 
 ```js
 {
-	uirouter: false,
-	partialDirectory: "partial/",
-	directiveDirectory: "directive/",
-	serviceDirectory: "service/",
-	filterDirectory: "filter/",
-	partialTemplates: "templates/partial",
-	directiveSimpleTemplates: "templates/simpleDirective",
-	directiveComplexTemplates: "templates/complexDirective",
-	serviceTemplates: "templates/service",
-	filterTemplates: "templates/filter",
+	"uirouter": false,
+	"partialDirectory": "partial/",
+	"directiveDirectory": "directive/",
+	"serviceDirectory": "service/",
+	"filterDirectory": "filter/",
+	"partialTemplates": "templates/partial",
+	"directiveSimpleTemplates": "templates/simpleDirective",
+	"directiveComplexTemplates": "templates/complexDirective",
+	"serviceTemplates": "templates/service",
+	"filterTemplates": "templates/filter",
     "inject": {
       "js": {
         "file": "index.html",
@@ -68,7 +68,7 @@ If a given template property is missing, the default templates will be used.
 
 ## Template Directories
 
-Each template directory can contain any number of files for a given sub-generator.  Each file will be read, run through the template engine, and then saved to the user specified destination.  The name of the destination file will be derived from the name of the template file after a word replacement has been done.  Each type of sub-generator will replace the sub-generator type word in the name with the user specified component name.  In other words, a template file named partial-spec.js, when the user creates a component named my-component, will turn into a destination file named my-component-spec.js.
+Each template directory can contain any number of files for a given sub-generator.  Each file will be read, run through the template engine, and then saved to the user specified destination.  The name of the destination file will be derived from the name of the template file by replacing the type word (partial/directive/filter/service) with the name of the component.  In other words, `partial-spec.js` becomes `whatever-spec.js`.
 
 ### Template variables
 

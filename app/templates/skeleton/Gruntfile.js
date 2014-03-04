@@ -1,6 +1,8 @@
 /*jslint node: true */
 'use strict';
 
+var pkg = require('./package.json');
+
 //Using exclusion patterns slows down Grunt significantly
 //instead of creating a set of patterns like '**/*.js' and '!**/node_modules/**'
 //this method is used to create a set of inclusive patterns for all subdirectories
@@ -80,7 +82,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       main: {
         options: {
-            module:'<%= _.slugify(appname) %>',
+            module: pkg.name,
             htmlmin:'<%%= htmlmin.main.options %>'
         },
         src: [createFolderGlobs('*.html'),'!index.html','!_SpecRunner.html'],

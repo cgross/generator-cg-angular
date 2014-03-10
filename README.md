@@ -13,7 +13,7 @@ Features
 * Integrates Bower for package management
 * Includes Yeoman sub-generators for directives, services, partials, and filters
 * Integrates LESS and includes Bootstrap via the source LESS files allowing you to reuse Bootstrap vars/mixins/etc.
-* Easily Testable - Each sub-generator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt server`.
+* Easily Testable - Each sub-generator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
 
 Directory Layout
 -------------
@@ -26,7 +26,7 @@ Below is an example of the folder structure.  In v3.0, all sub-generators for pa
     /admin ......................... example admin component folder
       /admin-directive1 ............ angular directives folder
         admin-directive1.js ........ example simple directive
-        admin-directive-spec1.j..... example simple directive unit test
+        admin-directive1-spec.js.... example simple directive unit test
       /admin-directive2 ............ example complex directive (contains external partial)
         admin-directive2.js ........ complex directive javascript
         admin-directive2.html ...... complex directive partial

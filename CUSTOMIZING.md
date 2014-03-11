@@ -76,5 +76,6 @@ All templates are valid underscore templates using the standard ERB-style delimi
 
 * `appname` - name of the Angular app/module name
 * `name` - the name of the component entered by the user
+* `dir` - the name of the directory where the component will be placed (includes trailing backslash)
 * `ctrlname` - (partials only) name of the controller
 * `_` - Underscore.js with Underscore.string mixed in.  This allows you to use code like `<%= _.camelize(name) %>` in the templates.

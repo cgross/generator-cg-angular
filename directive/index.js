@@ -67,6 +67,8 @@ DirectiveGenerator.prototype.files = function files() {
         defaultDir = 'templates/complex';
     }
 
+    this.htmlPath = this.dir + this.name + '.html';
+
     cgUtils.processTemplates(this.name,this.dir,'directive',this,defaultDir,configName);
 
 };

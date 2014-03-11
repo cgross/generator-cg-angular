@@ -5,7 +5,7 @@ angular.module('<%= appname %>').directive('<%= _.camelize(name) %>', function()
 		scope: {
 
 		},
-		templateUrl: 'directive/<%= name %>/<%= name %>.html',
+		templateUrl: '<%= htmlPath %>',
 		link: function(scope, element, attrs, fn) {
 
 

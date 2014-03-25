@@ -11,19 +11,21 @@ Features
    * Build uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) so you don't have to use the Angular injection syntax for safe minification (i.e. you dont need `$inject` or `(['$scope','$http',...`.
    * `grunt serve` task allows you to run a simple development server with watch/livereload enabled.  Additionally, JSHint and the appropriate unit tests are run for the changed files.
 * Integrates Bower for package management
-* Includes Yeoman sub-generators for directives, services, partials, and filters
+* Includes Yeoman subgenerators for directives, services, partials, and filters
 * Integrates LESS and includes Bootstrap via the source LESS files allowing you to reuse Bootstrap vars/mixins/etc.
-* Easily Testable - Each sub-generator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
+* Easily Testable - Each subgenerator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
 
 Directory Layout
 -------------
-Below is an example of the folder structure.  In v3.0, all sub-generators for partials, services, directives, and filters, allow the user to specify where to save the new files.  Thus you can create your own directory structure (including nesting) as you desire.  In this example, the user has chosen to group the app into an `admin` folder, a `search` folder, and a `service` folder.
+Below is an example of the folder structure.  In v3.0, all subgenerators for partials, services, directives, and filters, allow the user to specify where to save the new files.  Thus you can create your own directory structure (including nesting) as you desire.  In this example, the user has chosen to group the app into an `admin` folder, a `search` folder, and a `service` folder.
 
 
     app.less ....................... main app-wide styles
     app.js ......................... angular module initialization and route setup
     index.html ..................... main HTML file
-    /admin ......................... example admin component folder
+    /admin ......................... example admin module folder
+      admin.js ..................... admin module initialization and route setup
+      admin.less ................... admin module LESS
       /admin-directive1 ............ angular directives folder
         admin-directive1.js ........ example simple directive
         admin-directive1-spec.js.... example simple directive unit test
@@ -86,14 +88,14 @@ When `grunt serve` is running, any changed javascript files will be linted using
 Yeoman Subgenerators
 -------------
 
-There are a set of sub-generators to initialize empty Angular components.  Each of these generators will:
+There are a set of subgenerators to initialize empty Angular components.  Each of these generators will:
 
 * Create one or more skeleton files (javascript, LESS, html, spec etc) for the component type.
 * Update index.html and add the necessary `script` tags.
 * Update app.less and add the @import as needed.
 * For partials, update the app.js, adding the necessary route call if a route was entered in the generator prompts.
 
-There are generators for `directive`,`partial`,`service`, and `filter`.
+There are generators for `directive`,`partial`,`service`, `filter`, and `module`.
 
 Running a generator:
 
@@ -101,12 +103,16 @@ Running a generator:
     yo cg-angular:partial my-partial
     yo cg-angular:service my-service
     yo cg-angular:filter my-filter
+    yo cg-angular:module my-module
 
-The name paramater passed (i.e. 'my-awesome-directive') will be used the file names.  The generators will derive appropriate class names from this parameter (ex. 'my-awesome-directive' will convert to a class name of 'MyAwesomeDirective').  Each sub-generator will ask for the folder in which to create the new skeleton files.  You may override the default folder for each sub-generator in the `.yo-rc.json` file.
+The name paramater passed (i.e. 'my-awesome-directive') will be used the file names.  The generators will derive appropriate class names from this parameter (ex. 'my-awesome-directive' will convert to a class name of 'MyAwesomeDirective').  Each subgenerator will ask for the folder in which to create the new skeleton files.  You may override the default folder for each subgenerator in the `.yo-rc.json` file.
 
-Each sub-generator pulls the Angular app/module name from the package.json.  Therefore, if you choose to change the name of your Angular app/module, you must ensure that the name in the package.json stays in sync.
+Subgenerators are also customizable.  Please read [CUSTOMIZING.md](CUSTOMIZING.md) for details.
 
-Sub-generators are also customizable.  Please read [CUSTOMIZING.md](CUSTOMIZING.md) for details.
+Submodules
+-------------
+
+A new subgenerator to create submodules is included in v3.1.  Submodules allow you to more explicitly separate parts of your application.  Use the `yo cg-angular:module my-module` command and specify a new subdirectory to place the module into.  Once you've created a submodule, use any of the other subgenerators to create components inside that submodule.  Simply specify the target directory for the new component as either the submodule directory or a subdirectory of the submodule directory, and the subgenerators will automatically recognize the submodule and configure new the components using the submodule's name.
 
 Preconfigured Libraries
 -------------
@@ -136,8 +142,9 @@ Importantly, `grunt-dom-munger` uses CSS selectors to manage the parsing of the 
 
 Release History
 -------------
+* 3/??/2014 - v3.1.0 - Submodules feature added.
 * 3/10/2014 - v3.0.2 - Fix for directive files not being named correctly.  Fix for htmlmin from affecting some Bootstrap styles.
-* 3/03/2014 - v3.0.0 - All sub-generators now ask the user for a directory enabling any user-defined project structure.  Gruntfile has been altered to allow scripts, partials, and LESS files to be located anywhere in the project directory structure.  An option to use `angular-ui-router` is now available when initializing a new project. `js/setup.js` and `css/app.less` moved to `app.js` and `app.less`.  `grunt server` is now `grunt serve`.  Inside `index.html` all user script tags are grouped together instead of split out into groups for services/filters/etc.  New ability to customize the sub-generators.
+* 3/03/2014 - v3.0.0 - All subgenerators now ask the user for a directory enabling any user-defined project structure.  Gruntfile has been altered to allow scripts, partials, and LESS files to be located anywhere in the project directory structure.  An option to use `angular-ui-router` is now available when initializing a new project. `js/setup.js` and `css/app.less` moved to `app.js` and `app.less`.  `grunt server` is now `grunt serve`.  Inside `index.html` all user script tags are grouped together instead of split out into groups for services/filters/etc.  New ability to customize the subgenerators.
 * 2/10/2014 - v2.1.1 - Fix for the directive spec file named with a .less extension.
 * 1/06/2014 - v2.1.0 - Nice enhancements for unit testing.  Specs are now placed in the same directory as the component they're testing.  Additionally, unit tests are now run during `grunt server` allowing for an easy and efficient test-driven workflow.
 * 12/30/2013 - v2.0.0 - Big Update.  Angular 1.2 and Bootstrap 3.  Newer versions of Angular UI, Font Awesome, and JQuery.  Lodash was replaced with Underscore.  Lots of other small changes.

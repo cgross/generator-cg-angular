@@ -14,12 +14,6 @@ var FilterGenerator = module.exports = function FilterGenerator(args, options, c
 
 	yeoman.generators.NamedBase.apply(this, arguments);
 
-	try {
-		this.appname = require(path.join(process.cwd(), 'package.json')).name;
-	} catch (e) {
-		this.appname = 'Cant find name from package.json';
-	}
-
 };
 
 util.inherits(FilterGenerator, yeoman.generators.NamedBase);
@@ -30,6 +24,11 @@ FilterGenerator.prototype.askFor = function askFor() {
     var defaultDir = this.config.get('filterDirectory');
     if (!_(defaultDir).endsWith('/')) {
         defaultDir += '/';
+    }
+
+    var relative = path.relative(this.destinationRoot(),this.env.cwd);
+    if (relative) {
+        defaultDir = relative + '/' + defaultDir;
     }
 
     var prompts = [
@@ -49,6 +48,9 @@ FilterGenerator.prototype.askFor = function askFor() {
 
 FilterGenerator.prototype.files = function files() {
 
-    cgUtils.processTemplates(this.name,this.dir,'filter',this);
-    
+    var module = cgUtils.getParentModule(this.dir);
+    this.appname = module.name;
+
+    cgUtils.processTemplates(this.name,this.dir,'filter',this,null,null,module);
+
 };

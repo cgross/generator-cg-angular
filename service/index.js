@@ -14,12 +14,6 @@ var ServiceGenerator = module.exports = function ServiceGenerator(args, options,
 
 	yeoman.generators.NamedBase.apply(this, arguments);
 
-	try {
-		this.appname = require(path.join(process.cwd(), 'package.json')).name;
-	} catch (e) {
-		this.appname = 'Cant find name from package.json';
-	}
-
 };
 
 util.inherits(ServiceGenerator, yeoman.generators.NamedBase);
@@ -32,6 +26,11 @@ ServiceGenerator.prototype.askFor = function askFor() {
         defaultDir += '/';
     }
 
+    var relative = path.relative(this.destinationRoot(),this.env.cwd);
+    if (relative) {
+        defaultDir = relative + '/' + defaultDir;
+    }
+
     var prompts = [
         {
             name:'dir',
@@ -42,13 +41,15 @@ ServiceGenerator.prototype.askFor = function askFor() {
 
     this.prompt(prompts, function (props) {
         this.dir = cgUtils.cleanDirectory(props.dir);
-
         cb();
     }.bind(this));
 };
 
 ServiceGenerator.prototype.files = function files() {
 
-    cgUtils.processTemplates(this.name,this.dir,'service',this);
+    var module = cgUtils.getParentModule(this.dir);
+    this.appname = module.name;
+
+    cgUtils.processTemplates(this.name,this.dir,'service',this,null,null,module);
 
 };

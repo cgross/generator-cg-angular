@@ -14,12 +14,6 @@ var DirectiveGenerator = module.exports = function DirectiveGenerator(args, opti
 
     yeoman.generators.NamedBase.apply(this, arguments);
 
-    try {
-        this.appname = require(path.join(process.cwd(), 'package.json')).name;
-    } catch (e) {
-        this.appname = 'Cant find name from package.json';
-    }
-
 };
 
 util.inherits(DirectiveGenerator, yeoman.generators.NamedBase);
@@ -30,6 +24,11 @@ DirectiveGenerator.prototype.askFor = function askFor() {
     var defaultDir = this.config.get('directiveDirectory');
     if (!_(defaultDir).endsWith('/')) {
         defaultDir += '/';
+    }
+
+    var relative = path.relative(this.destinationRoot(),this.env.cwd);
+    if (relative) {
+        defaultDir = relative + '/' + defaultDir;
     }
 
     var prompts = [{
@@ -60,6 +59,9 @@ DirectiveGenerator.prototype.askFor = function askFor() {
 
 DirectiveGenerator.prototype.files = function files() {
 
+    var module = cgUtils.getParentModule(this.dir);
+    this.appname = module.name;
+
     var configName = 'directiveSimpleTemplates';
     var defaultDir = 'templates/simple';
     if (this.needpartial) {
@@ -69,6 +71,6 @@ DirectiveGenerator.prototype.files = function files() {
 
     this.htmlPath = this.dir + this.name + '.html';
 
-    cgUtils.processTemplates(this.name,this.dir,'directive',this,defaultDir,configName);
+    cgUtils.processTemplates(this.name,this.dir,'directive',this,defaultDir,configName,module);
 
 };

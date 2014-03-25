@@ -15,12 +15,6 @@ var PartialGenerator = module.exports = function PartialGenerator(args, options,
 
     yeoman.generators.NamedBase.apply(this, arguments);
 
-    try {
-        this.appname = require(path.join(process.cwd(), 'package.json')).name;
-    } catch (e) {
-        this.appname = 'Cant find name from package.json';
-    }
-
 };
 
 util.inherits(PartialGenerator, yeoman.generators.NamedBase);
@@ -31,6 +25,11 @@ PartialGenerator.prototype.askFor = function askFor() {
     var defaultDir = this.config.get('partialDirectory');
     if (!_(defaultDir).endsWith('/')) {
         defaultDir += '/';
+    }
+
+    var relative = path.relative(this.destinationRoot(),this.env.cwd);
+    if (relative) {
+        defaultDir = relative + '/' + defaultDir;
     }
 
     var prompts = [
@@ -55,21 +54,16 @@ PartialGenerator.prototype.askFor = function askFor() {
 
 PartialGenerator.prototype.files = function files() {
 
+    var module = cgUtils.getParentModule(this.dir);
+    this.appname = module.name;
+
     this.ctrlname = _.camelize(_.classify(this.name)) + 'Ctrl';
 
-    cgUtils.processTemplates(this.name,this.dir,'partial',this);    
+    cgUtils.processTemplates(this.name,this.dir,'partial',this,null,null,module);
 
     if (this.route && this.route.length > 0){
-
         var partialUrl = this.dir + this.name + '.html';
-
-        if (this.config.get('uirouter')) {
-            var code = '$stateProvider.state(\''+this.name+'\', {\n        url: \''+this.route+'\',\n        templateUrl: \''+partialUrl+'\'\n    });';
-            cgUtils.addToFile('app.js',code,cgUtils.STATE_MARKER,'    ');
-        } else {
-            cgUtils.addToFile('app.js','when(\''+this.route+'\',{templateUrl: \''+partialUrl+'\'}).',cgUtils.ROUTE_MARKER,'    ');
-        }
-        this.log.writeln(chalk.green(' updating') + ' %s','app.js');
+        cgUtils.injectRoute(module.file,this.config.get('uirouter'),this.name,this.route,partialUrl,this);
     }
 
 };

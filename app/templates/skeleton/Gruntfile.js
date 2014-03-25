@@ -48,6 +48,7 @@ module.exports = function (grunt) {
       main: {
         options: {
             livereload: true,
+            livereloadOnError: false,
             spawn: false
         },
         files: [createFolderGlobs(['*.js','*.less','*.html']),'!_SpecRunner.html','!.grunt'],
@@ -183,18 +184,20 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
+  grunt.registerTask('serve', ['browser_output','dom_munger:read','jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:read','jasmine']);
 
 
   grunt.event.on('watch', function(action, filepath) {
     //https://github.com/gruntjs/grunt-contrib-watch/issues/156
 
+    var tasksToRun = [];
+
     if (filepath.lastIndexOf('.js') !== -1 && filepath.lastIndexOf('.js') === filepath.length - 3) {
 
       //lint the changed js file
       grunt.config('jshint.main.src', filepath);
-      grunt.task.run('jshint');
+      tasksToRun.push('jshint');
 
       //find the appropriate unit test for the changed file
       var spec = filepath;
@@ -205,15 +208,17 @@ module.exports = function (grunt) {
       //if the spec exists then lets run it
       if (grunt.file.exists(spec)) {
         grunt.config('jasmine.unit.options.specs',spec);
-        grunt.task.run('jasmine:unit');
+        tasksToRun.push('jasmine:unit');
       }
     }
 
     //if index.html changed, we need to reread the <script> tags so our next run of jasmine
     //will have the correct environment
     if (filepath === 'index.html') {
-      grunt.task.run('dom_munger:read');
+      tasksToRun.push('dom_munger:read');
     }
+
+    grunt.config('watch.main.tasks',tasksToRun);
 
   });
 };

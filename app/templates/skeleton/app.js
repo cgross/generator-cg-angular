@@ -2,17 +2,15 @@ angular.module('<%= _.slugify(appname) %>', ['ui.bootstrap','ui.utils','<%= rout
 <% if (!uirouter) { %>
 angular.module('<%= _.slugify(appname) %>').config(function($routeProvider) {
 
-    $routeProvider.
     /* Add New Routes Above */
-    otherwise({redirectTo:'/home'});
+    $routeProvider.otherwise({redirectTo:'/home'});
 
 });
 <% } %><% if (uirouter) { %>
 angular.module('<%= _.slugify(appname) %>').config(function($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise('/home');
-
     /* Add New States Above */
+    $urlRouterProvider.otherwise('/home');
 
 });
 <% } %>

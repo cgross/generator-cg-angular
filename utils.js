@@ -6,9 +6,11 @@ var chalk = require('chalk');
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
 
-exports.addToFile = function(filename,lineToAdd,beforeMarker,spacing){
+var ngParseModule = require('ng-parse-module');
+
+exports.addToFile = function(filename,lineToAdd,beforeMarker){
 	try {
-		var fullPath = path.join(process.cwd(),filename);
+		var fullPath = path.resolve(process.cwd(),filename);
 		var fileSrc = fs.readFileSync(fullPath,'utf8');
 
 		var indexOf = fileSrc.indexOf(beforeMarker);
@@ -17,7 +19,6 @@ exports.addToFile = function(filename,lineToAdd,beforeMarker,spacing){
 		fileSrc = fileSrc.substring(0,indexOf) + lineToAdd + "\n" + indent + fileSrc.substring(indexOf);
 
 		fs.writeFileSync(fullPath,fileSrc);
-
 	} catch(e) {
 		throw e;
 	}
@@ -43,7 +44,7 @@ exports.cleanDirectory = function(directoryName) {
 	return directoryName + '/';
 };
 
-exports.processTemplates = function(name,dir,type,that,defaultDir,configName){
+exports.processTemplates = function(name,dir,type,that,defaultDir,configName,module){
 
     if (!defaultDir) {
         defaultDir = 'templates'
@@ -66,13 +67,16 @@ exports.processTemplates = function(name,dir,type,that,defaultDir,configName){
             //create the file
             that.template(templateFile,dir + customTemplateName);
             //inject the file reference into index.html/app.less/etc as appropriate
-            exports.inject(dir + customTemplateName,that);
+            exports.inject(dir + customTemplateName,that,module);
         });
 };
 
-exports.inject = function(filename,that) {
+exports.inject = function(filename,that,module) {
     //special case to skip unit tests
-    if (_(filename).endsWith('-spec.js')) {
+    if (_(filename).endsWith('-spec.js') ||
+        _(filename).endsWith('_spec.js') ||
+        _(filename).endsWith('-test.js') ||
+        _(filename).endsWith('_test.js')) {
         return;
     }
 
@@ -82,8 +86,50 @@ exports.inject = function(filename,that) {
     }
     var config = that.config.get('inject')[ext];
     if (config) {
-        var lineTemplate = _.template(config.template)({filename:filename});
-        exports.addToFile(config.file,lineTemplate,config.marker);
-        that.log.writeln(chalk.green(' updating') + ' %s',config.file);
+        var configFile = _.template(config.file)({module:path.basename(module.file,'.js')});
+        var injectFileRef = filename;
+        if (config.relativeToModule) {
+            configFile = path.join(path.dirname(module.file),configFile);
+            injectFileRef = path.relative(path.dirname(module.file),filename);
+        }
+        var lineTemplate = _.template(config.template)({filename:injectFileRef});
+        exports.addToFile(configFile,lineTemplate,config.marker);
+        that.log.writeln(chalk.green(' updating') + ' %s',path.basename(configFile));
     }
+};
+
+exports.injectRoute = function(moduleFile,uirouter,name,route,routeUrl,that){
+
+    if (uirouter){
+        var code = '$stateProvider.state(\''+name+'\', {\n        url: \''+route+'\',\n        templateUrl: \''+routeUrl+'\'\n    });';
+        exports.addToFile(moduleFile,code,exports.STATE_MARKER);
+    } else {
+        exports.addToFile(moduleFile,'$routeProvider.when(\''+route+'\',{templateUrl: \''+routeUrl+'\'});',exports.ROUTE_MARKER);
+    }
+
+    that.log.writeln(chalk.green(' updating') + ' %s',path.basename(moduleFile));
+
+};
+
+exports.getParentModule = function(dir){
+    //starting this dir, find the first module and return parsed results
+    if (fs.existsSync(dir)) {
+        var files = fs.readdirSync(dir);
+        for (var i = 0; i < files.length; i++) {
+            if (path.extname(files[i]) !== '.js') {
+                continue;
+            }
+            var results = ngParseModule.parse(path.join(dir,files[i]));
+            if (results) {
+                return results;
+            }
+        }
+    }
+
+    if (fs.existsSync(path.join(dir,'.yo-rc.json'))) {
+        //if we're in the root of the project then bail
+        return;
+    }
+
+    return exports.getParentModule(path.join(dir,'..'));
 };

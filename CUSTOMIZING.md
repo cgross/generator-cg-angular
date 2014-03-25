@@ -1,7 +1,7 @@
-Customizing the Sub-generators
+Customizing the Subgenerators
 -------------
 
-You may need to customize the sub-generators if you use things like SASS, RequireJS, and more.  The sub-generators can be extended and overriden through the `.yo-rc.json` file.  The `.yo-rc.json` file can be configured with the following properties:
+You may need to customize the subgenerators if you use things like SASS, RequireJS, and more.  The subgenerators can be extended and overriden through the `.yo-rc.json` file.  The `.yo-rc.json` file can be configured with the following properties:
 
 #### partialTemplates
 Type: `String`
@@ -31,11 +31,11 @@ Directory to load filter template files from
 #### inject
 Type: `Object`
 
-A map of file extensions where each extension key contains another map containing 3 properties (file, template, marker).  The sub-generators use these options to inject script tags and import statements.  These options can be extended to add new file types, or override to change the existing injection behavior.
+A map of file extensions where each extension key contains another map containing 3 properties (file, template, marker).  The subgenerators use these options to inject script tags and import statements.  These options can be extended to add new file types, or override to change the existing injection behavior.
 
 ## Example Configuration
 
-Here is an example configuration that matches the default behavior of the sub-generators:
+Here is an example configuration that matches the default behavior of the subgenerators:
 
 ```js
 {
@@ -60,7 +60,7 @@ Here is an example configuration that matches the default behavior of the sub-ge
         "marker": "/* Add Component LESS Above */",
         "template": "@import \"<%= filename %>\";"
       }
-    }	
+    }
 }
 ```
 
@@ -68,7 +68,7 @@ If a given template property is missing, the default templates will be used.
 
 ## Template Directories
 
-Each template directory can contain any number of files for a given sub-generator.  Each file will be read, run through the template engine, and then saved to the user specified destination.  The name of the destination file will be derived from the name of the template file by replacing the type word (partial/directive/filter/service) with the name of the component.  In other words, `partial-spec.js` becomes `whatever-spec.js`.
+Each template directory can contain any number of files for a given subgenerator.  Each file will be read, run through the template engine, and then saved to the user specified destination.  The name of the destination file will be derived from the name of the template file by replacing the type word (partial/directive/filter/service) with the name of the component.  In other words, `partial-spec.js` becomes `whatever-spec.js`.
 
 ### Template variables
 

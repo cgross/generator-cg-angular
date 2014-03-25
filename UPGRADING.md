@@ -1,9 +1,9 @@
-Upgrading Projects from v2.x
+Upgrading Projects from v2.x to v3.0
 -------------
 
-The following guide will describe the steps needed to take a project generated using v2 of the generator and enable it for use with v3.
+The following guide will describe the steps needed to take a project generated using v2 of the generator and enable it for use with v3.0.
 
-The new v3 generator has moved some files, made small changes how script tags and @import statements are injected, and offers users the ability to create a completely custom directory structure.  To convert a v2 project to v3, do the following:
+The new v3.0 generator has moved some files, made small changes how script tags and @import statements are injected, and offers users the ability to create a completely custom directory structure.  To convert a v2 project to v3.0, do the following:
 
 1. Rename and move `js/setup.js` to `app.js`.  Modify the related script tag in `index.html`.
 2. Move `css/app.less` to `app.less`.  Modify the related link tag in `index.html`.
@@ -38,5 +38,49 @@ The new v3 generator has moved some files, made small changes how script tags an
 }
 ```
 
-Thats it.
+Upgrading from v3.0 to v3.1
+-------------
 
+1.  Modify your `.yo-rc.json` file to look like the following.  The only changes are in the `less` section.  They are the new `relativeToModule` property and the updated `file` value.
+
+```js
+{
+    "generator-cg-angular": {
+        "uirouter": false,
+        "partialDirectory": "partial/",
+        "directiveDirectory": "directive/",
+        "serviceDirectory": "service/",
+        "filterDirectory": "filter/",
+        "inject": {
+            "js": {
+                "file": "index.html",
+                "marker": "<!-- Add New Component JS Above -->",
+                "template": "<script src=\"<%= filename %>\"></script>"
+            },
+            "less": {
+                "relativeToModule": true,
+                "file": "<%= module %>.less",
+                "marker": "/* Add Component LESS Above */",
+                "template": "@import \"<%= filename %>\";"
+            }
+        }
+    }
+}
+```
+
+2. Modify your `app.js` file.  The v3.1 generator does not generate the chained calls to `$routeProvider`.  Please update the `app.js` so that the contents of the `config` method call look something like:
+
+```js
+    /* Add New Routes Above */
+    $routeProvider.otherwise({redirectTo:'/home'});
+```
+
+Notice that there is now no beginning "$routeProvider." above the comment marker.  The new generator will inject full statements w/o chaining.  For example:
+
+```js
+  $routeProvider.when('route',{templateUrl:'partial.html'});
+  $routeProvider.when('route',{templateUrl:'partial.html'});
+  $routeProvider.when('route',{templateUrl:'partial.html'});
+  /* Add New Routes Above */
+  $routeProvider.otherwise({redirectTo:'/home'});
+```

@@ -20,37 +20,12 @@ util.inherits(FilterGenerator, yeoman.generators.NamedBase);
 
 FilterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
-    var name = this.name;
-    var defaultDir = this.config.get('filterDirectory');
-    if (!_(defaultDir).endsWith('/')) {
-        defaultDir += '/';
-    }
 
-    var relative = path.relative(this.destinationRoot(),this.env.cwd);
-    if (relative) {
-        defaultDir = relative + '/' + defaultDir;
-    }
-
-    var prompts = [
-        {
-            name:'dir',
-            message:'Where would you like to create the filter files?',
-            default: defaultDir
-        }
-    ];
-
-    this.prompt(prompts, function (props) {
-        this.dir = cgUtils.cleanDirectory(props.dir);
-
-        cb();
-    }.bind(this));
+    cgUtils.askForModuleAndDir('filter',this,false,cb);
 };
 
 FilterGenerator.prototype.files = function files() {
 
-    var module = cgUtils.getParentModule(this.dir);
-    this.appname = module.name;
-
-    cgUtils.processTemplates(this.name,this.dir,'filter',this,null,null,module);
+    cgUtils.processTemplates(this.name,this.dir,'filter',this,null,null,this.module);
 
 };

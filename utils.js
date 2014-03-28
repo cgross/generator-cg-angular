@@ -8,6 +8,12 @@ _.mixin(_.str.exports());
 
 var ngParseModule = require('ng-parse-module');
 
+exports.JS_MARKER = "<!-- Add New Component JS Above -->";
+exports.LESS_MARKER = "/* Add Component LESS Above */";
+
+exports.ROUTE_MARKER = "/* Add New Routes Above */";
+exports.STATE_MARKER = "/* Add New States Above */";
+
 exports.addToFile = function(filename,lineToAdd,beforeMarker){
 	try {
 		var fullPath = path.resolve(process.cwd(),filename);
@@ -22,26 +28,6 @@ exports.addToFile = function(filename,lineToAdd,beforeMarker){
 	} catch(e) {
 		throw e;
 	}
-};
-
-exports.JS_MARKER = "<!-- Add New Component JS Above -->";
-exports.LESS_MARKER = "/* Add Component LESS Above */";
-
-exports.ROUTE_MARKER = "/* Add New Routes Above */";
-exports.STATE_MARKER = "/* Add New States Above */";
-
-
-exports.cleanDirectory = function(directoryName) {
-
-	if (_(directoryName).startsWith('/') || _(directoryName).startsWith('\\')) {
-		directoryName = directoryName.substring(1);
-	}
-
-	if (_(directoryName).endsWith('/') || _(directoryName).endsWith('\\')) {
-		directoryName = directoryName.substring(0,directoryName.length - 1);
-	}
-
-	return directoryName + '/';
 };
 
 exports.processTemplates = function(name,dir,type,that,defaultDir,configName,module){
@@ -65,9 +51,9 @@ exports.processTemplates = function(name,dir,type,that,defaultDir,configName,mod
             var customTemplateName = template.replace(type,name);
             var templateFile = path.join(templateDirectory,template);
             //create the file
-            that.template(templateFile,dir + customTemplateName);
+            that.template(templateFile,path.join(dir,customTemplateName));
             //inject the file reference into index.html/app.less/etc as appropriate
-            exports.inject(dir + customTemplateName,that,module);
+            exports.inject(path.join(dir,customTemplateName),that,module);
         });
 };
 
@@ -132,4 +118,91 @@ exports.getParentModule = function(dir){
     }
 
     return exports.getParentModule(path.join(dir,'..'));
+};
+
+exports.askForModule = function(type,that,cb){
+
+    var modules = that.config.get('modules');
+    var mainModule = ngParseModule.parse('app.js');
+    mainModule.primary = true;
+
+    if (!modules || modules.length === 0) {
+        cb.bind(that)(mainModule);
+        return;
+    }
+
+    var choices = _.pluck(modules,'name');
+    choices.unshift(mainModule.name + ' (Primary Application Module)');
+
+    var prompts = [
+        {
+            name:'module',
+            message:'Which module would you like to place the new ' + type + '?',
+            type: 'list',
+            choices: choices,
+            default: 0
+        }
+    ];
+
+    that.prompt(prompts, function (props) {
+
+        var i = choices.indexOf(props.module);
+
+        var module;
+
+        if (i === 0) {
+            module = mainModule;
+        } else {
+            module = ngParseModule.parse(modules[i-1].file);
+        }
+
+        cb.bind(that)(module);
+    }.bind(that));
+
+};
+
+exports.askForDir = function(type,that,module,ownDir,cb){
+
+    that.module = module;
+    that.appname = module.name;
+    that.dir = path.dirname(module.file);
+
+    var defaultDir = path.join(that.dir,that.config.get(type + 'Directory'),'/');
+    defaultDir = path.relative(process.cwd(),defaultDir);
+
+    if (ownDir) {
+        defaultDir = path.join(defaultDir,that.name);
+    }
+
+    defaultDir = path.join(defaultDir,'/');
+
+    var prompts = [
+        {
+            name:'dir',
+            message:'Where would you like to create the '+type+' files?',
+            default: defaultDir,
+            validate: function(dir){
+                if (!module.primary) {
+                    //ensure dir is in module dir or subdir of it
+                    dir = path.resolve(dir);
+                    if (path.relative(that.dir,dir).substring(0,2) === '..') {
+                        return 'Files must be placed inside the module directory or a subdirectory of the module.'
+                    }
+                }
+                return true;
+            }
+        }
+    ];
+
+    that.prompt(prompts, function (props) {
+        that.dir = path.join(props.dir,'/');
+        cb();
+    }.bind(that));
+
+};
+
+exports.askForModuleAndDir = function(type,that,ownDir,cb) {
+    exports.askForModule(type,that,function(module){
+        exports.askForDir(type,that,module,ownDir,cb);
+    });
 };

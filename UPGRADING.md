@@ -78,9 +78,9 @@ Upgrading from v3.0 to v3.1
 Notice that there is now no beginning "$routeProvider." above the comment marker.  The new generator will inject full statements w/o chaining.  For example:
 
 ```js
-  $routeProvider.when('route',{templateUrl:'partial.html'});
-  $routeProvider.when('route',{templateUrl:'partial.html'});
-  $routeProvider.when('route',{templateUrl:'partial.html'});
-  /* Add New Routes Above */
-  $routeProvider.otherwise({redirectTo:'/home'});
+    $routeProvider.when('route',{templateUrl:'partial.html'});
+    $routeProvider.when('route2',{templateUrl:'partial2.html'});
+    $routeProvider.when('route3',{templateUrl:'partial3.html'});
+    /* Add New Routes Above */
+    $routeProvider.otherwise({redirectTo:'/home'});
 ```

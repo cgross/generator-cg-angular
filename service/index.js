@@ -20,36 +20,12 @@ util.inherits(ServiceGenerator, yeoman.generators.NamedBase);
 
 ServiceGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
-    var name = this.name;
-    var defaultDir = this.config.get('serviceDirectory');
-    if (!_(defaultDir).endsWith('/')) {
-        defaultDir += '/';
-    }
 
-    var relative = path.relative(this.destinationRoot(),this.env.cwd);
-    if (relative) {
-        defaultDir = relative + '/' + defaultDir;
-    }
-
-    var prompts = [
-        {
-            name:'dir',
-            message:'Where would you like to create the service files?',
-            default: defaultDir
-        }
-    ];
-
-    this.prompt(prompts, function (props) {
-        this.dir = cgUtils.cleanDirectory(props.dir);
-        cb();
-    }.bind(this));
+    cgUtils.askForModuleAndDir('service',this,false,cb);
 };
 
 ServiceGenerator.prototype.files = function files() {
 
-    var module = cgUtils.getParentModule(this.dir);
-    this.appname = module.name;
-
-    cgUtils.processTemplates(this.name,this.dir,'service',this,null,null,module);
+    cgUtils.processTemplates(this.name,this.dir,'service',this,null,null,this.module);
 
 };

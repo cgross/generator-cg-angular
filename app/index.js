@@ -4,7 +4,7 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var cgUtils = require('../utils.js');
 
-var CgangularGenerator = module.exports = function CgangularGenerator(args, options, config) {
+var CGAngularGenerator = module.exports = function CGAngularGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
 
     this.on('end', function () {
@@ -33,9 +33,9 @@ var CgangularGenerator = module.exports = function CgangularGenerator(args, opti
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
-util.inherits(CgangularGenerator, yeoman.generators.Base);
+util.inherits(CGAngularGenerator, yeoman.generators.Base);
 
-CgangularGenerator.prototype.askFor = function askFor() {
+CGAngularGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
     var prompts = [{
@@ -50,7 +50,7 @@ CgangularGenerator.prototype.askFor = function askFor() {
     }.bind(this));
 };
 
-CgangularGenerator.prototype.askForUiRouter = function askFor() {
+CGAngularGenerator.prototype.askForUiRouter = function askFor() {
     var cb = this.async();
 
     var prompts = [{
@@ -78,6 +78,6 @@ CgangularGenerator.prototype.askForUiRouter = function askFor() {
     }.bind(this));
 };
 
-CgangularGenerator.prototype.app = function app() {
+CGAngularGenerator.prototype.app = function app() {
     this.directory('skeleton/','./');
 };

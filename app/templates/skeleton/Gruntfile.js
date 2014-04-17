@@ -180,12 +180,37 @@ module.exports = function (grunt) {
           specs: createFolderGlobs('*-spec.js')
         }
       }
+    },
+    karma: {
+        options: {
+            configFile: 'karma.conf.js',
+            files: '<%= dom_munger.data.testjs %>',
+            exclude: ['node_modules/**/!(jasmine.js|adapter.js)','dist/**']
+        },
+        //continuous integration mode: run tests once in PhantomJS browser.
+        continuous: {
+            singleRun: true,
+            browsers: ['PhantomJS'],
+            reporters: ['junit'],
+            junitReporter: {
+                outputFile: 'test-results.xml'
+            }
+        },
     }
+  });
+
+
+  grunt.registerMultiTask('buildtestfilearray', 'Use the dom_munger appjs property and the config property to create an array for Karma to process', function() {
+    grunt.config.requires('dom_munger.data.appjs');
+
+    var appjs = grunt.config('dom_munger.data.appjs');
+    grunt.config('dom_munger.data.testjs', appjs.concat(this.data));
   });
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
   grunt.registerTask('serve', ['browser_output','dom_munger:read','jshint','connect', 'watch']);
-  grunt.registerTask('test',['dom_munger:read','jasmine']);
+  grunt.registerTask('test',['dom_munger:read','buildtestfilearray:include','karma']);
+  grunt.registerTask('test-ci',['dom_munger:read','buildtestfilearray:include','karma:continuous']);
 
 
   grunt.event.on('watch', function(action, filepath) {

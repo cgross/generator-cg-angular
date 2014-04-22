@@ -172,20 +172,49 @@ module.exports = function (grunt) {
         }]
       }
     },
-    jasmine: {
-      unit: {
-        src: ['<%%= dom_munger.data.appjs %>','bower_components/angular-mocks/angular-mocks.js'],
+    buildtestfilearray: {
+      include: [
+        'bower_components/angular-mocks/angular-mocks.js',
+        '**/*-spec.js',
+        'test/**/*.js'
+      ]
+    },
+    karma: {
         options: {
-          keepRunner: false,
-          specs: createFolderGlobs('*-spec.js')
-        }
-      }
+            basePath: '',
+            frameworks: ['jasmine'],
+            files: '<%= testfiles.data %>',
+            exclude: ['node_modules/**/!(jasmine.js|adapter.js)','dist/**'],
+            reporters: ['dots', 'progress'],
+            port: 9876,
+            colors: true,
+            browsers: ['Chrome'],
+            autoWatch: false
+        },
+        // unit testing - for use with 'watch' task
+        unit: {
+            background: true
+        },
+        //continuous integration mode: run tests once in PhantomJS browser.
+        continuous: {
+            singleRun: true,
+            browsers: ['PhantomJS']
+        },
     }
+  });
+
+
+  grunt.registerMultiTask('buildtestfilearray', 'Use the dom_munger appjs property and the config property to create an array for Karma to process', function() {
+    grunt.config.requires('dom_munger.data.appjs');
+
+    var appjs = grunt.config('dom_munger.data.appjs');
+    grunt.config('testfiles.data', appjs.concat(this.data));
   });
 
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
   grunt.registerTask('serve', ['browser_output','dom_munger:read','jshint','connect', 'watch']);
-  grunt.registerTask('test',['dom_munger:read','jasmine']);
+  grunt.registerTask('test',['dom_munger:read','buildtestfilearray','karma:unit']);
+  grunt.registerTask('test-ci',['dom_munger:read','buildtestfilearray','karma:continuous']);
 
 
   grunt.event.on('watch', function(action, filepath) {
@@ -207,12 +236,13 @@ module.exports = function (grunt) {
 
       //if the spec exists then lets run it
       if (grunt.file.exists(spec)) {
-        grunt.config('jasmine.unit.options.specs',spec);
-        tasksToRun.push('jasmine:unit');
+        var extras = ['bower_components/angular-mocks/angular-mocks.js', spec];
+        grunt.config('testfiles.data', grunt.config('dom_munger.data.appjs').concat(extras));
+        tasksToRun.push('karma:unit');
       }
     }
 
-    //if index.html changed, we need to reread the <script> tags so our next run of jasmine
+    //if index.html changed, we need to reread the <script> tags so our next run of karma
     //will have the correct environment
     if (filepath === 'index.html') {
       tasksToRun.push('dom_munger:read');

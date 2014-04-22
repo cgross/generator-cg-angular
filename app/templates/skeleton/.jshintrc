@@ -23,6 +23,8 @@
         "module": true,
         "inject": true,
         "it": true,
-        "expect": true
+        "expect": true,
+        "xdescribe": true,
+        "xit": true
     }
 }

@@ -13,7 +13,8 @@ Features
 * Integrates Bower for package management
 * Includes Yeoman subgenerators for directives, services, partials, and filters
 * Integrates LESS and includes Bootstrap via the source LESS files allowing you to reuse Bootstrap vars/mixins/etc.
-* Easily Testable - Each subgenerator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
+* Easily Testable - Each sub-generator creates a skeleton unit test, and [Karma](http://karma-runner.github.io/) is included.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
+* Easily integratable with Jenkins - run `grunt test-ci` to do a single run unit test
 
 Directory Layout
 -------------
@@ -80,7 +81,8 @@ Grunt Tasks
 Now that the project is created, you have 3 simple Grunt commands available:
 
     grunt serve   #This will run a development server with watch & livereload enabled.
-    grunt test    #Run unit tests.
+    grunt test    #Run local unit tests.
+    grunt test-ci #Run single-run unit tests and publish results to an XML file - useful for CI
     grunt build   #Places a fully optimized (minified, concatenated, and more) in /dist
 
 When `grunt serve` is running, any changed javascript files will be linted using JSHint as well as have their appropriate unit tests executed.  Only the unit tests that correspond to the changed file will be run.
@@ -105,7 +107,7 @@ Running a generator:
     yo cg-angular:filter my-filter
     yo cg-angular:module my-module
 
-The name paramater passed (i.e. 'my-awesome-directive') will be used the file names.  The generators will derive appropriate class names from this parameter (ex. 'my-awesome-directive' will convert to a class name of 'MyAwesomeDirective').  Each subgenerator will ask for the folder in which to create the new skeleton files.  You may override the default folder for each subgenerator in the `.yo-rc.json` file.
+The name paramater passed (i.e. 'my-awesome-directive') will be used as the file names.  The generators will derive appropriate class names from this parameter (ex. 'my-awesome-directive' will convert to a class name of 'MyAwesomeDirective').  Each sub-generator will ask for the folder in which to create the new skeleton files.  You may override the default folder for each sub-generator in the `.yo-rc.json` file.
 
 Subgenerators are also customizable.  Please read [CUSTOMIZING.md](CUSTOMIZING.md) for details.
 
@@ -142,6 +144,7 @@ Importantly, `grunt-dom-munger` uses CSS selectors to manage the parsing of the 
 
 Release History
 -------------
+* 4/22/2014 - v3.1.1 - Added Karma support.
 * 3/??/2014 - v3.1.0 - Submodules feature added.
 * 3/10/2014 - v3.0.2 - Fix for directive files not being named correctly.  Fix for htmlmin from affecting some Bootstrap styles.
 * 3/03/2014 - v3.0.0 - All subgenerators now ask the user for a directory enabling any user-defined project structure.  Gruntfile has been altered to allow scripts, partials, and LESS files to be located anywhere in the project directory structure.  An option to use `angular-ui-router` is now available when initializing a new project. `js/setup.js` and `css/app.less` moved to `app.js` and `app.less`.  `grunt server` is now `grunt serve`.  Inside `index.html` all user script tags are grouped together instead of split out into groups for services/filters/etc.  New ability to customize the subgenerators.

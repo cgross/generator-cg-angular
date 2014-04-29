@@ -172,50 +172,31 @@ module.exports = function (grunt) {
         }]
       }
     },
-    buildtestfilearray: {
-      include: [
-        'bower_components/angular-mocks/angular-mocks.js',
-        '**/*-spec.js',
-        'test/**/*.js'
-      ]
-    },
     karma: {
-        options: {
-            basePath: '',
-            frameworks: ['jasmine'],
-            files: '<%= testfiles.data %>',
-            exclude: ['node_modules/**/!(jasmine.js|adapter.js)','dist/**'],
-            reporters: ['dots', 'progress'],
-            port: 9876,
-            colors: true,
-            browsers: ['Chrome'],
-            autoWatch: false
-        },
-        // unit testing - for use with 'watch' task
-        unit: {
-            background: true
-        },
-        //continuous integration mode: run tests once in PhantomJS browser.
-        continuous: {
-            singleRun: true,
-            browsers: ['PhantomJS']
-        },
+      options: {
+        frameworks: ['jasmine'],
+        files: [  //this files data is also updated in the watch handler, if updated change there too
+          '<%%= dom_munger.data.appjs %>',
+          'bower_components/angular-mocks/angular-mocks.js',
+          createFolderGlobs('*-spec.js')
+        ],
+        logLevel:'ERROR',
+        reporters:['mocha'],
+        autoWatch: false, //watching is handled by grunt-contrib-watch
+        singleRun: true
+      },
+      all_tests: {
+        browsers: ['PhantomJS','Chrome','Firefox']
+      },
+      during_watch: {
+        browsers: ['PhantomJS']
+      },
     }
   });
 
-
-  grunt.registerMultiTask('buildtestfilearray', 'Use the dom_munger appjs property and the config property to create an array for Karma to process', function() {
-    grunt.config.requires('dom_munger.data.appjs');
-
-    var appjs = grunt.config('dom_munger.data.appjs');
-    grunt.config('testfiles.data', appjs.concat(this.data));
-  });
-
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
-  grunt.registerTask('serve', ['browser_output','dom_munger:read','jshint','connect', 'watch']);
-  grunt.registerTask('test',['dom_munger:read','buildtestfilearray','karma:unit']);
-  grunt.registerTask('test-ci',['dom_munger:read','buildtestfilearray','karma:continuous']);
-
+  grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
+  grunt.registerTask('test',['dom_munger:read','karma:all_tests']);
 
   grunt.event.on('watch', function(action, filepath) {
     //https://github.com/gruntjs/grunt-contrib-watch/issues/156
@@ -236,9 +217,11 @@ module.exports = function (grunt) {
 
       //if the spec exists then lets run it
       if (grunt.file.exists(spec)) {
-        var extras = ['bower_components/angular-mocks/angular-mocks.js', spec];
-        grunt.config('testfiles.data', grunt.config('dom_munger.data.appjs').concat(extras));
-        tasksToRun.push('karma:unit');
+        var files = [].concat(grunt.config('dom_munger.data.appjs'));
+        files.push('bower_components/angular-mocks/angular-mocks.js');
+        files.push(spec);
+        grunt.config('karma.options.files', files);
+        tasksToRun.push('karma:during_watch');
       }
     }
 

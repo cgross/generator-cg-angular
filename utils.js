@@ -2,11 +2,10 @@ var path = require('path');
 var fs = require('fs');
 var _ = require('underscore');
 var chalk = require('chalk');
-
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
-
 var ngParseModule = require('ng-parse-module');
+
 
 exports.JS_MARKER = "<!-- Add New Component JS Above -->";
 exports.LESS_MARKER = "/* Add Component LESS Above */";
@@ -167,7 +166,11 @@ exports.askForDir = function(type,that,module,ownDir,cb){
     that.appname = module.name;
     that.dir = path.dirname(module.file);
 
-    var defaultDir = path.join(that.dir,that.config.get(type + 'Directory'),'/');
+    var configedDir = that.config.get(type + 'Directory');
+    if (!configedDir){
+        configedDir = '.';
+    }
+    var defaultDir = path.join(that.dir,configedDir,'/');
     defaultDir = path.relative(process.cwd(),defaultDir);
 
     if (ownDir) {
@@ -176,7 +179,7 @@ exports.askForDir = function(type,that,module,ownDir,cb){
 
     defaultDir = path.join(defaultDir,'/');
 
-    var prompts = [
+    var dirPrompt = [
         {
             name:'dir',
             message:'Where would you like to create the '+type+' files?',
@@ -194,10 +197,46 @@ exports.askForDir = function(type,that,module,ownDir,cb){
         }
     ];
 
-    that.prompt(prompts, function (props) {
+    var dirPromptCallback = function (props) {
+
         that.dir = path.join(props.dir,'/');
-        cb();
-    }.bind(that));
+        var dirToCreate = that.dir;
+        if (ownDir){
+            dirToCreate = path.join(dirToCreate, '..');
+        }
+
+        if (!fs.existsSync(dirToCreate)) {
+            that.prompt([{
+                name:'isConfirmed',
+                type:'confirm',
+                message:chalk.cyan(dirToCreate) + ' does not exist.  Create it?'
+            }],function(props){
+                if (props.isConfirmed){
+                    cb();
+                } else {
+                    that.prompt(dirPrompt,dirPromptCallback);
+                }
+            });
+        } else if (ownDir && fs.existsSync(that.dir)){
+            //if the dir exists and this type of thing generally is inside its own dir, confirm it
+            that.prompt([{
+                name:'isConfirmed',
+                type:'confirm',
+                message:chalk.cyan(that.dir) + ' already exists.  Components of this type contain multiple files and are typically put inside directories of their own.  Continue?'
+            }],function(props){
+                if (props.isConfirmed){
+                    cb();
+                } else {
+                    that.prompt(dirPrompt,dirPromptCallback);
+                }
+            });
+        } else {
+            cb();
+        }
+
+    };
+
+    that.prompt(dirPrompt,dirPromptCallback);
 
 };
 

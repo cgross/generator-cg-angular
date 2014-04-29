@@ -13,8 +13,7 @@ Features
 * Integrates Bower for package management
 * Includes Yeoman subgenerators for directives, services, partials, and filters
 * Integrates LESS and includes Bootstrap via the source LESS files allowing you to reuse Bootstrap vars/mixins/etc.
-* Easily Testable - Each sub-generator creates a skeleton unit test, and [Karma](http://karma-runner.github.io/) is included.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
-* Easily integratable with Jenkins - run `grunt test-ci` to do a single run unit test
+* Easily Testable - Each sub-generator creates a skeleton unit test.  Unit tests can be run via `grunt test` and they run automatically during the grunt watch that is active during `grunt serve`.
 
 Directory Layout
 -------------
@@ -82,10 +81,9 @@ Now that the project is created, you have 3 simple Grunt commands available:
 
     grunt serve   #This will run a development server with watch & livereload enabled.
     grunt test    #Run local unit tests.
-    grunt test-ci #Run single-run unit tests and publish results to an XML file - useful for CI
     grunt build   #Places a fully optimized (minified, concatenated, and more) in /dist
 
-When `grunt serve` is running, any changed javascript files will be linted using JSHint as well as have their appropriate unit tests executed.  Only the unit tests that correspond to the changed file will be run.
+When `grunt serve` is running, any changed javascript files will be linted using JSHint as well as have their appropriate unit tests executed.  Only the unit tests that correspond to the changed file will be run.  This allows for an efficient test driven workflow.
 
 Yeoman Subgenerators
 -------------
@@ -97,7 +95,7 @@ There are a set of subgenerators to initialize empty Angular components.  Each o
 * Update app.less and add the @import as needed.
 * For partials, update the app.js, adding the necessary route call if a route was entered in the generator prompts.
 
-There are generators for `directive`,`partial`,`service`, `filter`, and `module`.
+There are generators for `directive`,`partial`,`service`, `filter`, `module`, and `modal`.
 
 Running a generator:
 
@@ -106,15 +104,18 @@ Running a generator:
     yo cg-angular:service my-service
     yo cg-angular:filter my-filter
     yo cg-angular:module my-module
+    yo cg-angular:modal my-modal
 
 The name paramater passed (i.e. 'my-awesome-directive') will be used as the file names.  The generators will derive appropriate class names from this parameter (ex. 'my-awesome-directive' will convert to a class name of 'MyAwesomeDirective').  Each sub-generator will ask for the folder in which to create the new skeleton files.  You may override the default folder for each sub-generator in the `.yo-rc.json` file.
+
+The modal subgenerator is a convenient shortcut to create partials that work as modals for Bootstrap v3.1 and Angular-UI-Bootstrap v0.10 (both come preconfigured with this generator).  If you choose not to use either of these libraries, please do not use the modal subgenerator.
 
 Subgenerators are also customizable.  Please read [CUSTOMIZING.md](CUSTOMIZING.md) for details.
 
 Submodules
 -------------
 
-A new subgenerator to create submodules is included in v3.1.  Submodules allow you to more explicitly separate parts of your application.  Use the `yo cg-angular:module my-module` command and specify a new subdirectory to place the module into.  Once you've created a submodule, use any of the other subgenerators to create components inside that submodule.  Simply specify the target directory for the new component as either the submodule directory or a subdirectory of the submodule directory, and the subgenerators will automatically recognize the submodule and configure new the components using the submodule's name.
+A new subgenerator to create submodules is included in v3.1.  Submodules allow you to more explicitly separate parts of your application.  Use the `yo cg-angular:module my-module` command and specify a new subdirectory to place the module into.  Once you've created a submodule, running other subgenerators will now prompt you to select the module in which to place the new component.  You may still create any directory structure you wish, but a component within a module must be placed in the module directory or a subdirectory of the module directory.
 
 Preconfigured Libraries
 -------------
@@ -144,8 +145,7 @@ Importantly, `grunt-dom-munger` uses CSS selectors to manage the parsing of the 
 
 Release History
 -------------
-* 4/22/2014 - v3.1.1 - Added Karma support.
-* 3/??/2014 - v3.1.0 - Submodules feature added.
+* 4/??/2014 - v3.1.0 - New subgenerators for modules and modals.  Replaced grunt-contrib-jasmine with grunt-karma.  Karma allows us to test against actual browsers other than PhantomJS.
 * 3/10/2014 - v3.0.2 - Fix for directive files not being named correctly.  Fix for htmlmin from affecting some Bootstrap styles.
 * 3/03/2014 - v3.0.0 - All subgenerators now ask the user for a directory enabling any user-defined project structure.  Gruntfile has been altered to allow scripts, partials, and LESS files to be located anywhere in the project directory structure.  An option to use `angular-ui-router` is now available when initializing a new project. `js/setup.js` and `css/app.less` moved to `app.js` and `app.less`.  `grunt server` is now `grunt serve`.  Inside `index.html` all user script tags are grouped together instead of split out into groups for services/filters/etc.  New ability to customize the subgenerators.
 * 2/10/2014 - v2.1.1 - Fix for the directive spec file named with a .less extension.

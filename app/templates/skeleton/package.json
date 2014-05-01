@@ -24,7 +24,7 @@
     "karma-jasmine": "~0.1.5",
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-chrome-launcher": "~0.1.3",
-    "karma-mocha-reporter": "~0.2.4",
+    "karma-mocha-reporter": "~0.2.5",
     "karma-firefox-launcher": "~0.1.3"
   }
 }

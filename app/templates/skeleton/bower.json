@@ -10,9 +10,11 @@
   "dependencies": {
     "jquery": "~2.0",
     "underscore": "~1.5",
-    "bootstrap": "~3.1",
-    "angular": "~1.2",
-    <% if(uirouter) { print('"angular-ui-router": "~0.2",'); } else { print('"angular-route": "~1.2",'); } %>
+    "bootstrap": "~3.1",<% if(css === 'Sass') { %>
+    "bootstrap-sass-official": "~3.1",<% } %>
+    "angular": "~1.2",<% if(uirouter) { %>
+    "angular-ui-router": "~0.2",<% } else { %>
+    "angular-route": "~1.2",<% } %>
     "angular-animate": "~1.2",
     "angular-resource": "~1.2",
     "angular-cookies": "~1.2",

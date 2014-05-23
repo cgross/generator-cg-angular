@@ -1,7 +1,7 @@
 {
-  "name": "<%= _.slugify(appname) %>",
+  "name": "<%= _.camelize(appname) %>",
   "version": "0.0.0",
-  "devDependencies": {
+  "devDependencies": {<% if (builder === 'Grunt') { %>
     "grunt": "~0.4",
     "grunt-dom-munger": "~3.4",
     "grunt-angular-templates": "~0.5",
@@ -14,17 +14,38 @@
     "grunt-contrib-uglify": "~0.2",
     "grunt-contrib-jshint": "~0.9",
     "grunt-contrib-htmlmin": "~0.1",
-    "grunt-contrib-imagemin": "~0.4",
-    "grunt-contrib-less": "~0.8",
+    "grunt-contrib-imagemin": "~0.4",<% if (css === 'LESS') { %>
+    "grunt-contrib-less": "~0.8",<% } else { %>
+    "grunt-sass": "~0.12",<% } %>
     "grunt-contrib-watch": "~0.6",
     "grunt-browser-output": "0.1.0",
     "load-grunt-tasks": "~0.2",
-    "karma": "~0.12.6",
-    "grunt-karma": "~0.8.3",
-    "karma-jasmine": "~0.1.5",
-    "karma-phantomjs-launcher": "~0.1.4",
-    "karma-chrome-launcher": "~0.1.3",
-    "karma-mocha-reporter": "~0.2.5",
-    "karma-firefox-launcher": "~0.1.3"
+    "grunt-karma": "~0.8",<% } %><% if (builder === 'Gulp') { %>
+    "gulp": "~3.6",
+    "gulp-concat": "~2.2",
+    "gulp-uglify": "~0.3",
+    "gulp-imagemin": "~0.5",<% if (css === 'LESS') { %>
+    "gulp-less": "~1.2",<% } else { %>
+    "gulp-sass": "~0.7",<% } %>
+    "gulp-cheerio": "~0.3",
+    "gulp-ng-html2js": "~0.1",
+    "gulp-ngmin": "~0.3",
+    "gulp-htmlmin": "~0.1",
+    "gulp-cssmin": "~0.1",
+    "gulp-rename": "~1.2",
+    "gulp-jshint": "~1.6",
+    "gulp-dom-src": "~0.1",
+    "gulp-karma": "0.0",
+    "gulp-connect": "~2.0",
+    "streamqueue": "0.0",
+    "rimraf": "~2.2",
+    "underscore": "~1.6",
+    "cheerio": "~0.16",<% } %>
+    "karma": "~0.12",
+    "karma-jasmine": "~0.1",
+    "karma-phantomjs-launcher": "~0.1",
+    "karma-chrome-launcher": "~0.1",
+    "karma-mocha-reporter": "~0.2",
+    "karma-firefox-launcher": "~0.1"
   }
 }

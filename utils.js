@@ -9,9 +9,14 @@ var ngParseModule = require('ng-parse-module');
 
 exports.JS_MARKER = "<!-- Add New Component JS Above -->";
 exports.LESS_MARKER = "/* Add Component LESS Above */";
+exports.SASS_MARKER = "/* Add Component Sass Above */";
 
 exports.ROUTE_MARKER = "/* Add New Routes Above */";
 exports.STATE_MARKER = "/* Add New States Above */";
+
+var endsWith = function(source,suffix){
+    return source.indexOf(suffix, source.length - suffix.length) !== -1;
+};
 
 exports.addToFile = function(filename,lineToAdd,beforeMarker){
 	try {
@@ -42,9 +47,26 @@ exports.processTemplates = function(name,dir,type,that,defaultDir,configName,mod
     if(that.config.get(configName)){
         templateDirectory = path.join(process.cwd(),that.config.get(configName));
     }
+
+    var cssType = that.config.get('css');
+    if (!cssType) {
+        cssType = 'LESS';
+    }
     _.chain(fs.readdirSync(templateDirectory))
         .filter(function(template){
-            return template[0] !== '.';
+
+            if (template[0] === '.'){
+                return false;
+            }
+
+            //special filtering for CSS preproc's
+            if (endsWith(template,'.less')){
+                return cssType === 'LESS';
+            } else if (endsWith(template,'.scss')){
+                return cssType === 'Sass';
+            }
+
+            return true;
         })
         .each(function(template){
             var customTemplateName = template.replace(type,name);

@@ -4,15 +4,17 @@
   <title></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="utf-8">
-  <link href="app.less" type="text/css" rel="stylesheet/less">
+<% if (css === 'LESS') { %>
+  <link href="app.less" type="text/css" rel="stylesheet/less"><% } else { %>
+  <link href="app.css" type="text/css" rel="stylesheet"><% } %>
 </head>
 <body>
-
+<% if (builder === 'Grunt') { %>
   <!-- Livereload script for development only (stripped during dist build) -->
   <script src="http://localhost:35729/livereload.js" data-concat="false"></script>
-
-  <!-- JS from Bower Components -->
-  <script src="bower_components/less.js/dist/less-1.6.2.js" data-concat="false"></script>
+<% } %>
+  <!-- JS from Bower Components --><% if (css === 'LESS') { %>
+  <script src="bower_components/less.js/dist/less-1.6.2.js" data-concat="false"></script><% } %>
   <script src="bower_components/jquery/jquery.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="bower_components/underscore/underscore.js"></script>

@@ -31,7 +31,8 @@ Directory to load filter template files from
 #### inject
 Type: `Object`
 
-A map of file extensions where each extension key contains another map containing 3 properties (file, template, marker).  The subgenerators use these options to inject script tags and import statements.  These options can be extended to add new file types, or override to change the existing injection behavior.
+A map of file extensions where each extension key contains another map containing 3 properties (file, template, marker).  The subgenerators use these options to inject script tags and import statements.  These options can be extended to add new file types, or override to change the existing injection behavior. The file location that is to be generated can be accessed using the `filename` template variable.
+
 
 ## Example Configuration
 
@@ -49,6 +50,7 @@ Here is an example configuration that matches the default behavior of the subgen
 	"directiveComplexTemplates": "templates/complexDirective",
 	"serviceTemplates": "templates/service",
 	"filterTemplates": "templates/filter",
+	"moduleTemplates": "templates/module",
     "inject": {
       "js": {
         "file": "index.html",

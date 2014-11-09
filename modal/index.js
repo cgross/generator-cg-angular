@@ -10,16 +10,28 @@ var path = require('path');
 
 var ModalGenerator = module.exports = function ModalGenerator(args, options, config) {
 
-    yeoman.generators.NamedBase.apply(this, arguments);
+    cgUtils.getNameArg(this,args);
+
+    yeoman.generators.Base.apply(this, arguments);
 
 };
 
-util.inherits(ModalGenerator, yeoman.generators.NamedBase);
+util.inherits(ModalGenerator, yeoman.generators.Base);
 
 ModalGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
-    cgUtils.askForModuleAndDir('modal',this,true,cb);
+    var prompts = [];
+
+    cgUtils.addNamePrompt(this,prompts,'modal');
+
+    this.prompt(prompts, function (props) {
+        if (props.name){
+            this.name = props.name;
+        }
+        cgUtils.askForModuleAndDir('modal',this,true,cb);
+    }.bind(this)); 
+
 };
 
 ModalGenerator.prototype.files = function files() {

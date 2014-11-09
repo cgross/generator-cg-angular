@@ -12,24 +12,27 @@ _.mixin(_.str.exports());
 
 var ModuleGenerator = module.exports = function ModuleGenerator(args, options, config) {
 
-    yeoman.generators.NamedBase.apply(this, arguments);
+    cgUtils.getNameArg(this,args);
+
+    yeoman.generators.Base.apply(this, arguments);
 
     this.uirouter = this.config.get('uirouter');
     this.routerModuleName = this.uirouter ? 'ui.router' : 'ngRoute';
 };
 
-util.inherits(ModuleGenerator, yeoman.generators.NamedBase);
+util.inherits(ModuleGenerator, yeoman.generators.Base);
 
 ModuleGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
-    var name = this.name;
-    var defaultDir = path.join(this.name,'/');
+    var that = this;
 
     var prompts = [
         {
             name:'dir',
             message:'Where would you like to create the module (must specify a subdirectory)?',
-            default: defaultDir,
+            default: function(data){
+                return path.join(that.name || data.name,'/');
+            },
             validate: function(value) {
                 value = _.str.trim(value);
                 if (_.isEmpty(value) || value[0] === '/' || value[0] === '\\') {
@@ -40,7 +43,12 @@ ModuleGenerator.prototype.askFor = function askFor() {
         }
     ];
 
+    cgUtils.addNamePrompt(this,prompts,'module');
+
     this.prompt(prompts, function (props) {
+        if (props.name){
+            this.name = props.name;
+        }        
         this.dir = path.join(props.dir,'/');
         cb();
     }.bind(this));

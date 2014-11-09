@@ -12,16 +12,28 @@ _.mixin(_.str.exports());
 
 var ServiceGenerator = module.exports = function ServiceGenerator(args, options, config) {
 
-	yeoman.generators.NamedBase.apply(this, arguments);
+    cgUtils.getNameArg(this,args);
+
+	yeoman.generators.Base.apply(this, arguments);
 
 };
 
-util.inherits(ServiceGenerator, yeoman.generators.NamedBase);
+util.inherits(ServiceGenerator, yeoman.generators.Base);
 
 ServiceGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
-    cgUtils.askForModuleAndDir('service',this,false,cb);
+    var prompts = [];
+
+    cgUtils.addNamePrompt(this,prompts,'service');
+
+    this.prompt(prompts, function (props) {
+        if (props.name){
+            this.name = props.name;
+        }
+        cgUtils.askForModuleAndDir('service',this,false,cb);
+    }.bind(this));     
+
 };
 
 ServiceGenerator.prototype.files = function files() {

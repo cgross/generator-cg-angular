@@ -10,7 +10,7 @@ Features
     * Each controller, service, filter, and directive are placed in their own file.
     * All files related to a conceptual unit are placed together.  For example, the controller, HTML, LESS, and unit test for a partial are placed together in the same directory.
 * Provides a ready-made Grunt build that produces an extremely optimized distribution.
-   * Build uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) so you don't have to use the Angular injection syntax for safe minification (i.e. you dont need `$inject` or `(['$scope','$http',...`.
+   * Build uses [grunt-ng-annotate](https://github.com/olov/ng-annotate) so you don't have to use the Angular injection syntax for safe minification (i.e. you dont need `$inject` or `(['$scope','$http',...`.
    * `grunt serve` task allows you to run a simple development server with watch/livereload enabled.  Additionally, JSHint and the appropriate unit tests are run for the changed files.
 * Integrates Bower for package management
 * Includes Yeoman subgenerators for directives, services, partials, filters, and modules.
@@ -134,10 +134,10 @@ The project will include a ready-made Grunt build that will:
 
 * Build all the LESS files into one minified CSS file.
 * Uses [grunt-angular-templates](https://github.com/ericclemmons/grunt-angular-templates) to turn all your partials into Javascript.
-* Uses [grunt-ngmin](https://github.com/btford/grunt-ngmin) to preprocess all Angular injectable methods and make them minification safe.  Thus you don't have to use the array syntax.
+* Uses [grunt-ng-annotate](https://github.com/olov/ng-annotate) to preprocess all Angular injectable methods and make them minification safe.  Thus you don't have to use the array syntax.
 * Concatenates and minifies all Javascript into one file.
 * Replaces all appropriate script references in `index.html` with the minified CSS and JS files.
-* Minifies any images in `/img`.
+* (Optionally) Minifies any images in `/img`.
 * Minifies the `index.html`.
 * Copies any extra files necessary for a distributable build (ex.  Font-Awesome font files, etc).
 
@@ -154,6 +154,7 @@ Importantly, grunt-dom-munger uses CSS attribute selectors to manage the parsing
 
 Release History
 -------------
+* 11/9/2014 - v3.2.0 - Switch from ngmin to ng-annotate.  Disabling grunt-contrib-imagemin so Windows users don't encounter its issues.  Subgenerators prompt for a name if not entered.  Other fixes.
 * 7/6/2014 - v3.1.2 - Fix for directive template URLs with backslashes on Windows.
 * 6/10/2014 - v3.1.1 - Fix for backslashes being used in injected routes/tags on subgenerators.
 * 5/1/2014 - v3.1.0 - New subgenerators for modules and modals.  Replaced grunt-contrib-jasmine with grunt-karma.  Karma allows us to test against actual browsers other than PhantomJS.

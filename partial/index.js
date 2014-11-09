@@ -7,17 +7,20 @@ var cgUtils = require('../utils.js');
 var _ = require('underscore');
 var chalk = require('chalk');
 var fs = require('fs');
+var url = require('url');
 
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
 
 var PartialGenerator = module.exports = function PartialGenerator(args, options, config) {
 
-    yeoman.generators.NamedBase.apply(this, arguments);
+    cgUtils.getNameArg(this,args);
+
+    yeoman.generators.Base.apply(this, arguments);
 
 };
 
-util.inherits(PartialGenerator, yeoman.generators.NamedBase);
+util.inherits(PartialGenerator, yeoman.generators.Base);
 
 PartialGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -29,8 +32,13 @@ PartialGenerator.prototype.askFor = function askFor() {
         }
     ];
 
+    cgUtils.addNamePrompt(this,prompts,'partial');
+
     this.prompt(prompts, function (props) {
-        this.route = props.route;
+        if (props.name){
+            this.name = props.name;
+        }
+        this.route = url.resolve('',props.route);
         cgUtils.askForModuleAndDir('partial',this,true,cb);
     }.bind(this));
 };

@@ -136,7 +136,7 @@ module.exports = function (grunt) {
         dest: 'temp/app.full.js'
       }
     },
-    ngmin: {
+    ngAnnotate: {
       main: {
         src:'temp/app.full.js',
         dest: 'temp/app.full.js'
@@ -164,15 +164,20 @@ module.exports = function (grunt) {
         }
       }
     },
-    imagemin: {
-      main:{
-        files: [{
-          expand: true, cwd:'dist/',
-          src:['**/{*.png,*.jpg}'],
-          dest: 'dist/'
-        }]
-      }
-    },
+    //Imagemin has issues on Windows.  
+    //To enable imagemin:
+    // - "npm install grunt-contrib-imagemin"
+    // - Comment in this section
+    // - Add the "imagemin" task after the "htmlmin" task in the build task alias
+    // imagemin: {
+    //   main:{
+    //     files: [{
+    //       expand: true, cwd:'dist/',
+    //       src:['**/{*.png,*.jpg}'],
+    //       dest: 'dist/'
+    //     }]
+    //   }
+    // },
     karma: {
       options: {
         frameworks: ['jasmine'],
@@ -195,7 +200,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
+  grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngAnnotate','uglify','copy','htmlmin','clean:after']);
   grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
   grunt.registerTask('test',['dom_munger:read','karma:all_tests']);
 

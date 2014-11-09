@@ -12,11 +12,13 @@ _.mixin(_.str.exports());
 
 var DirectiveGenerator = module.exports = function DirectiveGenerator(args, options, config) {
 
-    yeoman.generators.NamedBase.apply(this, arguments);
+    cgUtils.getNameArg(this,args);
+
+    yeoman.generators.Base.apply(this, arguments);
 
 };
 
-util.inherits(DirectiveGenerator, yeoman.generators.NamedBase);
+util.inherits(DirectiveGenerator, yeoman.generators.Base);
 
 DirectiveGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -28,7 +30,12 @@ DirectiveGenerator.prototype.askFor = function askFor() {
         default: true
     }];
 
+    cgUtils.addNamePrompt(this,prompts,'directive');
+
     this.prompt(prompts, function (props) {
+        if (props.name){
+            this.name = props.name;
+        }
         this.needpartial = props.needpartial;
         cgUtils.askForModuleAndDir('directive',this,this.needpartial,cb);
     }.bind(this));

@@ -248,3 +248,21 @@ exports.askForModuleAndDir = function(type,that,ownDir,cb) {
         exports.askForDir(type,that,module,ownDir,cb);
     });
 };
+
+exports.getNameArg = function(that,args){
+    if (args.length > 0){
+        that.name = args[0];
+    }
+};
+
+exports.addNamePrompt = function(that,prompts,type){
+    if (!that.name){
+        prompts.splice(0,0,{
+            name:'name',
+            message: 'Enter a name for the ' + type + '.',
+            validate: function(input){
+                return true;
+            }
+        });
+    }
+}

@@ -12,16 +12,29 @@ _.mixin(_.str.exports());
 
 var FilterGenerator = module.exports = function FilterGenerator(args, options, config) {
 
-	yeoman.generators.NamedBase.apply(this, arguments);
+    cgUtils.getNameArg(this,args);
+
+	yeoman.generators.Base.apply(this, arguments);
 
 };
 
-util.inherits(FilterGenerator, yeoman.generators.NamedBase);
+util.inherits(FilterGenerator, yeoman.generators.Base);
 
 FilterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
-    cgUtils.askForModuleAndDir('filter',this,false,cb);
+    var prompts = [];
+
+    cgUtils.addNamePrompt(this,prompts,'filter');
+
+    this.prompt(prompts, function (props) {
+        if (props.name){
+            this.name = props.name;
+        }
+        cgUtils.askForModuleAndDir('filter',this,false,cb);
+    }.bind(this));    
+
+    
 };
 
 FilterGenerator.prototype.files = function files() {

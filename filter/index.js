@@ -14,7 +14,7 @@ var FilterGenerator = module.exports = function FilterGenerator(args, options, c
 
     cgUtils.getNameArg(this,args);
 
-	yeoman.generators.Base.apply(this, arguments);
+    yeoman.generators.Base.apply(this, arguments);
 
 };
 

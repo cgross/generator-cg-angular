@@ -14,19 +14,19 @@ exports.ROUTE_MARKER = "/* Add New Routes Above */";
 exports.STATE_MARKER = "/* Add New States Above */";
 
 exports.addToFile = function(filename,lineToAdd,beforeMarker){
-	try {
-		var fullPath = path.resolve(process.cwd(),filename);
-		var fileSrc = fs.readFileSync(fullPath,'utf8');
+    try {
+        var fullPath = path.resolve(process.cwd(),filename);
+        var fileSrc = fs.readFileSync(fullPath,'utf8');
 
-		var indexOf = fileSrc.indexOf(beforeMarker);
+        var indexOf = fileSrc.indexOf(beforeMarker);
         var lineStart = fileSrc.substring(0,indexOf).lastIndexOf('\n') + 1;
         var indent = fileSrc.substring(lineStart,indexOf);
-		fileSrc = fileSrc.substring(0,indexOf) + lineToAdd + "\n" + indent + fileSrc.substring(indexOf);
+        fileSrc = fileSrc.substring(0,indexOf) + lineToAdd + "\n" + indent + fileSrc.substring(indexOf);
 
-		fs.writeFileSync(fullPath,fileSrc);
-	} catch(e) {
-		throw e;
-	}
+        fs.writeFileSync(fullPath,fileSrc);
+    } catch(e) {
+        throw e;
+    }
 };
 
 exports.processTemplates = function(name,dir,type,that,defaultDir,configName,module){

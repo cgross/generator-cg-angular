@@ -14,7 +14,7 @@ var ServiceGenerator = module.exports = function ServiceGenerator(args, options,
 
     cgUtils.getNameArg(this,args);
 
-	yeoman.generators.Base.apply(this, arguments);
+    yeoman.generators.Base.apply(this, arguments);
 
 };
 

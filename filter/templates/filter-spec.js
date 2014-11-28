@@ -1,13 +1,13 @@
 describe('<%= _.camelize(name) %>', function() {
 
-	beforeEach(module('<%= appname %>'));
+    beforeEach(module('<%= appname %>'));
 
-	it('should ...', inject(function($filter) {
+    it('should ...', inject(function($filter) {
 
         var filter = $filter('<%= _.camelize(name) %>');
 
-		expect(filter('input')).toEqual('output');
+        expect(filter('input')).toEqual('output');
 
-	}));
+    }));
 
 });

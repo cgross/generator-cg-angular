@@ -4,7 +4,7 @@ describe('<%= _.camelize(name) %>', function() {
 
   it('should ...', inject(function(<%= _.camelize(name) %>) {
 
-	//expect(<%= _.camelize(name) %>.doSomething()).toEqual('something');
+    //expect(<%= _.camelize(name) %>.doSomething()).toEqual('something');
 
   }));
 

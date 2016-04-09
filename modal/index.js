@@ -30,7 +30,7 @@ ModalGenerator.prototype.askFor = function askFor() {
             this.name = props.name;
         }
         cgUtils.askForModuleAndDir('modal',this,true,cb);
-    }.bind(this)); 
+    }.bind(this));
 
 };
 
@@ -43,9 +43,9 @@ ModalGenerator.prototype.files = function files() {
     setTimeout((function(){
 
         console.log('');
-        console.log('  Open this modal by using ' + chalk.bold('angular-ui-bootstrap') + ' module\'s ' + chalk.bold('$modal') + ' service:');
+        console.log('  Open this modal by using ' + chalk.bold('angular-ui-bootstrap') + ' module\'s ' + chalk.bold('$uibModal') + ' service:');
         console.log('');
-        console.log('  $modal.open({');
+        console.log('  $uibModal.open({');
         console.log('      templateUrl: \'' + path.join(this.dir,this.name + '.html') + '\',');
         console.log('      controller: \''+ this.ctrlname +'\'');
         console.log('  }).result.then(function(result){');

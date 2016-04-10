@@ -1,4 +1,4 @@
-angular.module('<%= _.camelize(appname) %>', ['ui.bootstrap','ui.utils','<%= routerModuleName %>','ngAnimate']);
+angular.module('<%= _.camelize(appname) %>', ['ui.bootstrap','<%= routerModuleName %>','ngAnimate']);
 <% if (!uirouter) { %>
 angular.module('<%= _.camelize(appname) %>').config(function($routeProvider) {
 

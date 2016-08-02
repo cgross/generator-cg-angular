@@ -1,3 +1,11 @@
+
+
+| *Newer Modern Generator for Angular and Webpack* |
+| ----- |
+| _There is a new generator for Angular 1.5, Webpack, npm, SASS, and ES6.  Check it out here:_  https://github.com/cgross/generator-cg-angular15  |
+
+---
+
 #generator-cg-angular
 
 >Yeoman Generator for Enterprise Angular Projects
